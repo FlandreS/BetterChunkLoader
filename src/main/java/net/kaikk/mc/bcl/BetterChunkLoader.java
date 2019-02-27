@@ -1,17 +1,17 @@
 package net.kaikk.mc.bcl;
 
-import java.io.File;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import net.kaikk.mc.bcl.datastore.DataStoreManager;
 import net.kaikk.mc.bcl.datastore.MySqlDataStore;
 import net.kaikk.mc.bcl.datastore.XmlDataStore;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
+import net.kaikk.mc.bcl.listeners.PlayerListener;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.UUID;
 
 public class BetterChunkLoader extends JavaPlugin {
 	private static BetterChunkLoader instance;
@@ -45,6 +45,7 @@ public class BetterChunkLoader extends JavaPlugin {
 		instance=this;
 		
 		this.enable();
+		PlaceHolderIntegration.initialize();
 	}
 	
 	public void enable() {
@@ -85,6 +86,10 @@ public class BetterChunkLoader extends JavaPlugin {
 				
 				this.getLogger().info("Loading Listeners...");
 				this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
+				if (Bukkit.getPluginManager().isPluginEnabled("EverNifeRankUp")){
+					this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+				}
+
 				this.getCommand("betterchunkloader").setExecutor(new CommandExec(this));
 				
 				this.getLogger().info("Load complete.");

@@ -1,12 +1,13 @@
 package net.kaikk.mc.bcl;
 
+import br.com.finalcraft.evernifecore.config.uuids.UUIDsController;
 import org.bukkit.Material;
 
 public class Config {
 	public int maxHoursOffline, defaultChunksAmountAlwaysOn, defaultChunksAmountOnlineOnly, maxChunksAmountAlwaysOn, maxChunksAmountOnlineOnly, onlineOnlyMeta, alwaysOnMeta;
 	public String dataStore, mySqlHostname, mySqlUsername, mySqlPassword, mySqlDatabase;
 	public Material onlineOnlyMaterial, alwaysOnMaterial;
-	
+
 	Config(BetterChunkLoader instance) {
 		instance.getConfig().options().copyDefaults(true);
 		instance.saveDefaultConfig();
@@ -44,5 +45,13 @@ public class Config {
 			instance.getLogger().warning("Invalid material: "+ms);
 		}
 		alwaysOnMaterial = m;
+	}
+
+	public static String getNameFromUUID(String UUID){
+		String theName = UUIDsController.getNameFromUUID(UUID);
+		if (theName == null){
+			return "SemNome";
+		}
+		return theName;
 	}
 }

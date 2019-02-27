@@ -1,9 +1,7 @@
 package net.kaikk.mc.bcl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
+import net.kaikk.mc.bcl.datastore.DataStoreManager;
+import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -20,8 +18,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
-import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 public class EventListener implements Listener {
 	private BetterChunkLoader instance;
@@ -40,10 +39,13 @@ public class EventListener implements Listener {
 			return;
 		}
 		
-		if (clickedBlock.getType()==instance.config().alwaysOnMaterial && clickedBlock.getData() == instance.config().alwaysOnMeta || clickedBlock.getType()==instance.config().onlineOnlyMaterial && clickedBlock.getData() == instance.config().onlineOnlyMeta) {
-			if (action==Action.RIGHT_CLICK_BLOCK) {
+		if (clickedBlock.getType()==instance.config().alwaysOnMaterial  || clickedBlock.getType()==instance.config().onlineOnlyMaterial) {
+            //player.sendMessage("Checker Valid Material");
+            if (action==Action.RIGHT_CLICK_BLOCK) {
+				//player.sendMessage("Checker 1");
 				CChunkLoader chunkLoader = DataStoreManager.getDataStore().getChunkLoaderAt(new BlockLocation(clickedBlock.getLocation()));
 				if (player.getItemInHand().getType()==Material.BLAZE_ROD) {
+					//player.sendMessage("Checker 2");
 					if (chunkLoader!=null) {
 						if (player.getUniqueId().equals(chunkLoader.getOwner()) || player.hasPermission("betterchunkloader.edit") || (chunkLoader.isAdminChunkLoader() && player.hasPermission("betterchunkloader.adminloader"))) {
 							chunkLoader.showUI(player);
@@ -52,8 +54,9 @@ public class EventListener implements Listener {
 						}
 					} else {
 						if (canBreak(clickedBlock, player)) {
+							//player.sendMessage("Checker 3");
 							UUID uid=player.getUniqueId();
-							if (clickedBlock.getType()==instance.config().alwaysOnMaterial && clickedBlock.getData() == instance.config().alwaysOnMeta) {
+							if (clickedBlock.getType()==instance.config().alwaysOnMaterial) {
 								if (!player.hasPermission("betterchunkloader.alwayson")) {
 									player.sendMessage(Messages.get("NoPermissionToCreateAlwaysOnChunkLoaders") +(player.isOp()?" (betterchunkloader.alwayson is needed)":""));
 									return;
@@ -61,7 +64,7 @@ public class EventListener implements Listener {
 								if (player.isSneaking() && player.hasPermission("betterchunkloader.adminloader")) {
 									uid=CChunkLoader.adminUUID;
 								}
-							} else if (clickedBlock.getType()==instance.config().onlineOnlyMaterial && clickedBlock.getData() == instance.config().onlineOnlyMeta) {
+							} else if (clickedBlock.getType()==instance.config().onlineOnlyMaterial) {
 								if (!player.hasPermission("betterchunkloader.onlineonly")) {
 									player.sendMessage(Messages.get("NoPermissionToCreateOnlineOnlyChunkLoaders")+(player.isOp()?" (betterchunkloader.onlineonly is needed)":""));
 									return;
@@ -70,7 +73,7 @@ public class EventListener implements Listener {
 								return;
 							}
 
-							chunkLoader = new CChunkLoader((int) (Math.floor(clickedBlock.getX()/16.00)), (int) (Math.floor(clickedBlock.getZ()/16.00)), clickedBlock.getWorld().getName(), (byte) -1, uid, new BlockLocation(clickedBlock), null, (clickedBlock.getType() == instance.config().alwaysOnMaterial && clickedBlock.getData() == instance.config().alwaysOnMeta));
+							chunkLoader = new CChunkLoader((int) (Math.floor(clickedBlock.getX()/16.00)), (int) (Math.floor(clickedBlock.getZ()/16.00)), clickedBlock.getWorld().getName(), (byte) -1, uid,player.getName(), new BlockLocation(clickedBlock), null, (clickedBlock.getType() == instance.config().alwaysOnMaterial));
 							chunkLoader.showUI(player);
 						} else {
 							player.sendMessage(Messages.get("NoBuildPermission"));
@@ -90,6 +93,7 @@ public class EventListener implements Listener {
 				}
 			}
 		}
+		//player.sendMessage("Checker Nothing Happened");
 	}
 
 	@EventHandler(ignoreCancelled=true, priority = EventPriority.HIGH)
@@ -122,7 +126,7 @@ public class EventListener implements Listener {
 		if (event.getResult()!=Result.ALLOWED) {
 			return;
 		}
-	
+
 		List<CChunkLoader> clList = DataStoreManager.getDataStore().getChunkLoaders(event.getPlayer().getUniqueId());
 
 		for (CChunkLoader chunkLoader : clList) {

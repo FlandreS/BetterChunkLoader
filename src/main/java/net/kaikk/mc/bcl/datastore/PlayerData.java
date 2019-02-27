@@ -1,11 +1,10 @@
 package net.kaikk.mc.bcl.datastore;
 
-import java.util.UUID;
+import net.kaikk.mc.bcl.BetterChunkLoader;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import net.kaikk.mc.bcl.BetterChunkLoader;
+import java.util.UUID;
 
 @XmlRootElement
 public class PlayerData {

@@ -1,13 +1,13 @@
 package net.kaikk.mc.bcl;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Messages {
 	private static Map<String, String> messages = new HashMap<String, String>();

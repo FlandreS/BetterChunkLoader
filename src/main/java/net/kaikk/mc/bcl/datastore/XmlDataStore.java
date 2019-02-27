@@ -1,10 +1,7 @@
 package net.kaikk.mc.bcl.datastore;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import net.kaikk.mc.bcl.BetterChunkLoader;
+import net.kaikk.mc.bcl.CChunkLoader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -14,9 +11,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import net.kaikk.mc.bcl.BetterChunkLoader;
-import net.kaikk.mc.bcl.CChunkLoader;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 
 public class XmlDataStore extends AHashMapDataStore {

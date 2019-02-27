@@ -1,20 +1,7 @@
 package net.kaikk.mc.bcl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import net.kaikk.mc.bcl.forgelib.ChunkLoader;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -24,33 +11,44 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.kaikk.mc.bcl.forgelib.ChunkLoader;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @XmlRootElement
 @XmlAccessorType(value=XmlAccessType.NONE)
 public class CChunkLoader extends ChunkLoader implements InventoryHolder {
 	final public static UUID adminUUID = new UUID(0,1);
+	private String name = "NaoDefinido";
 	private UUID owner;
 	private BlockLocation loc;
 	private Date creationDate;
 	private boolean isAlwaysOn;
-	
+	public boolean markDisabled = false;
+
 	private Map<UUID,BukkitTask> currentVisualizations = new HashMap<UUID,BukkitTask>();
 	
 	public CChunkLoader() { }
 	
-	public CChunkLoader(int chunkX, int chunkZ, String worldName, byte range, UUID owner, BlockLocation loc, Date creationDate, boolean isAlwaysOn) {
+	public CChunkLoader(int chunkX, int chunkZ, String worldName, byte range, UUID owner, String name, BlockLocation loc, Date creationDate, boolean isAlwaysOn) {
 		super(chunkX, chunkZ, worldName, range);
 		this.owner = owner;
+		this.name = name;
 		this.loc = loc;
 		this.creationDate = creationDate;
 		this.isAlwaysOn = isAlwaysOn;
 	}
 	
-	public CChunkLoader(String location, byte range, UUID owner, Date creationDate, boolean isAlwaysOn) {
+	public CChunkLoader(String location, byte range, UUID owner, String name, Date creationDate, boolean isAlwaysOn) {
 		super(0, 0, "", range);
 		this.setLocationString(location);
 		this.owner = owner;
+		this.name = name;
 		this.creationDate = creationDate;
 		this.isAlwaysOn = isAlwaysOn;
 	}
@@ -73,12 +71,12 @@ public class CChunkLoader extends ChunkLoader implements InventoryHolder {
 		}
 		return BetterChunkLoader.getPlayerLastPlayed(owner);
 	}
-	
+
 	public String getOwnerName() {
-		if (this.isAdminChunkLoader()) {
-			return Messages.get("Admin");
+		if (this.isAdminChunkLoader()){
+			return "Admin";
 		}
-		return this.getOfflinePlayer().getName();
+		return Config.getNameFromUUID(this.getOwner().toString());
 	}
 	
 	public int side() {
@@ -203,7 +201,7 @@ public class CChunkLoader extends ChunkLoader implements InventoryHolder {
 		is.setItemMeta(im);
 		inventory.setItem(position, is);
 	}
-	
+
 	@XmlAttribute(name="own")
 	void setOwner(UUID owner) {
 		this.owner = owner;

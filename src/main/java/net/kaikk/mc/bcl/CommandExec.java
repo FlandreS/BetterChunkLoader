@@ -1,22 +1,26 @@
 package net.kaikk.mc.bcl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.UUID;
-
+import br.com.finalcraft.evernifecore.FCBukkitUtil;
+import br.com.finalcraft.evernifecore.fancytext.FancyText;
+import net.kaikk.mc.bcl.datastore.DataStoreManager;
+import net.kaikk.mc.bcl.datastore.IDataStore;
+import net.kaikk.mc.bcl.datastore.PlayerData;
+import net.kaikk.mc.bcl.evernife.EverNifeFunctions;
+import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
-import net.kaikk.mc.bcl.datastore.IDataStore;
-import net.kaikk.mc.bcl.datastore.PlayerData;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public class CommandExec implements CommandExecutor {
 	BetterChunkLoader instance;
@@ -28,35 +32,65 @@ public class CommandExec implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equals("betterchunkloader")) {
-			final String usage = ChatColor.GOLD + "Usage: /"+label+" [info|list|chunks|delete|purge|reload|enable|disable]";
-			if (args.length==0) {
-				sender.sendMessage(usage);
-				return false;
-			}
-			
-			switch(args[0].toLowerCase()) {
-			case "info":
-				return info(sender);
-			case "list":
-				return list(sender, label, args);
-			case "chunks":
-				return chunks(sender, label, args);
-			case "delete":
-				return delete(sender, label, args);
-			case "purge":
-				return purge(sender);
-			case "reload":
-				return reload(sender);
-			case "enable":
-				return enable(sender);
-			case "disable":
-				return disable(sender);
+
+			if (args.length!=0) {
+                switch(args[0].toLowerCase()) {
+                    case "info":
+                        return info(sender);
+                    case "list":
+                        return list(sender, label, args);
+					case "chunks":
+						return chunks(sender, label, args);
+					case "removertudo":
+						return removertudo(sender);
+                    case "delete":
+                        return delete(sender, label, args);
+                    case "purge":
+                        return purge(sender);
+                    case "reload":
+                        return reload(sender);
+                    case "enable":
+                        return enable(sender);
+                    case "disable":
+                        return disable(sender);
+                    case "listpremium":
+                        return listPremiumChunks(sender);
+                    case "disableplayer":
+                        return disableFromPlayer(sender,label,args);
+					case "near":
+						return near(sender);
+                }
 			}
 
-			sender.sendMessage(usage);
+            sender.sendMessage(tlc("&6---------- BCL ----------"));
+            sender.sendMessage(tlc(" &a&l- &a&n/" + label + " info &a- Mostra informações gerais."));
+            sender.sendMessage(tlc(" &a&l- &a&n/" + label + " list &a- Lista todas os ChunkLoaders."));
+			sender.sendMessage(tlc(" &a&l- &a&n/" + label + " chunks &a- Alterar ou ver Chunks de um jogador."));
+			sender.sendMessage(tlc(" &a&l- &a&n/" + label + " removertudo &a- Remove todos os seus chunkloaders."));
+
+            if (sender.hasPermission("betterchunkloader.delete")){
+				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " delete &a- Deleta as chunks de um jogador."));
+				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " purge &a- Limpa os chunkloaders incorretos"));
+				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " enable &a- Ativa o Plugin"));
+				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " disable &a- Desativa o Plugin"));
+				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " listpremium &a- Lista as PremiumChunks"));
+				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " disableplayer &a- Desativa as Chunks Premium de um jogador"));
+
+			}
+         sender.sendMessage("");
 		}
 		
 		return false;
+	}
+
+	private boolean removertudo(CommandSender sender) {
+
+		if ( !(sender instanceof Player)){
+			sender.sendMessage(ChatColor.RED + "Apenas jogadores físicos podem usar esse comando!");
+		}
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"bcl delete " + sender.getName());
+		sender.sendMessage(ChatColor.GREEN + "Todos os seus chunkloaders foram removidos!");
+		return true;
 	}
 	
 	private boolean info(CommandSender sender) {
@@ -267,26 +301,17 @@ public class CommandExec implements CommandExecutor {
 				PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
 				if (args[3].equalsIgnoreCase("alwayson")) {
 					if (playerData.getAlwaysOnChunksAmount()+amount>this.instance.config().maxChunksAmountAlwaysOn) {
-						if (args.length != 5 && args[5].equalsIgnoreCase("max")) {
-							amount = this.instance.config().maxChunksAmountAlwaysOn;
-						} else if (args.length == 5 || !args[5].equalsIgnoreCase("force")) {
-							sender.sendMessage("Couldn't add "+amount+" always-on chunks to "+player.getName()+" because it would exceed the always-on chunks limit of "+this.instance.config().maxChunksAmountAlwaysOn);
-							return false;
-						}
+						sender.sendMessage("Couldn't add " + amount + " always-on chunks to "+player.getName()+" because it would exceed the always-on chunks limit of "+this.instance.config().maxChunksAmountAlwaysOn);
+						amount = this.instance.config().maxChunksAmountAlwaysOn = playerData.getAlwaysOnChunksAmount();
 					}
 
 					DataStoreManager.getDataStore().addAlwaysOnChunksLimit(player.getUniqueId(), amount);
 					sender.sendMessage("Added "+amount+" always-on chunks to "+player.getName());
 				} else if (args[3].equalsIgnoreCase("onlineonly")) {
 					if (playerData.getOnlineOnlyChunksAmount()+amount>this.instance.config().maxChunksAmountOnlineOnly) {
-						if (args.length != 5 && args[5].equalsIgnoreCase("max")) {
-							amount = this.instance.config().maxChunksAmountOnlineOnly;
-						} else if (args.length == 5 || !args[5].equalsIgnoreCase("force")) {
-							sender.sendMessage("Couldn't add "+amount+" online-only chunks to "+player.getName()+" because it would exceed the online-only chunks limit of "+this.instance.config().maxChunksAmountOnlineOnly);
-							return false;	
-						}
+						sender.sendMessage("Couldn't add " + amount + " online-only chunks to "+player.getName()+" because it would exceed the online-only chunks limit of "+this.instance.config().maxChunksAmountOnlineOnly);
+						amount = this.instance.config().maxChunksAmountAlwaysOn = playerData.getOnlineOnlyChunksAmount();
 					}
-					
 					DataStoreManager.getDataStore().addOnlineOnlyChunksLimit(player.getUniqueId(), amount);
 					sender.sendMessage("Added "+amount+" online-only chunks to "+player.getName());
 				} else {
@@ -409,6 +434,110 @@ public class CommandExec implements CommandExecutor {
 		sender.sendMessage(ChatColor.GREEN + "BetterChunkLoader has been disabled!");
 		return true;
 	}
+
+	private boolean listPremiumChunks(CommandSender sender) {
+		if (!sender.hasPermission("betterchunkloader.listPremiumChunks")) {
+			sender.sendMessage(Messages.get("PermissionDenied"));
+			return false;
+		}
+
+		if ( !(sender instanceof Player)){
+			sender.sendMessage("Apenas jogadores físicos podem usar esse comando!");
+		}
+		Player player = (Player) sender;
+
+		sender.sendMessage("--------- Premium Chunks ---------");
+		EverNifeFunctions.getActivePremiumChunks().forEach(cChunkLoader ->
+				FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
+						.setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+						.setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+				));
+		return true;
+	}
+
+	private boolean disableFromPlayer(CommandSender sender, String label, String[] args) {
+		if (!sender.hasPermission("betterchunkloader.disableFromPlayer")) {
+			sender.sendMessage(Messages.get("PermissionDenied"));
+			return false;
+		}
+
+		if (args.length < 2){
+			sender.sendMessage("Erro de parametros, use \"" + label + "disablefromplayer <Player>\" ");
+			return false;
+		}
+
+		List<CChunkLoader> playersChunks = EverNifeFunctions.getActivePremiumChunksFromPlayer( args[1] );
+
+		if (playersChunks.isEmpty()){
+			sender.sendMessage("O jogador " + args[1] + " não possui ChunkLoaders Premium");
+			return false;
+		}
+
+		boolean senderIsAPlayer = false;
+
+		if (sender instanceof Player) {
+			senderIsAPlayer = true;
+		}
+
+		sender.sendMessage("--------- Removed Chunks ---------");
+		if (senderIsAPlayer){
+			final Player player = (Player) sender;
+			playersChunks.forEach(cChunkLoader ->
+					FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
+							.setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+							.setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+					));
+		}
+		sender.sendMessage("");
+
+		for (CChunkLoader cChunkLoader : playersChunks){
+			cChunkLoader.markDisabled = true;
+			BCLForgeLib.instance().removeChunkLoader(cChunkLoader);
+		}
+
+		return true;
+	}
+
+	private boolean near(CommandSender sender) {
+		if (!sender.hasPermission("betterchunkloader.near")) {
+			sender.sendMessage(Messages.get("PermissionDenied"));
+			return false;
+		}
+
+		if (FCBukkitUtil.isNotPlayer(sender)){
+			return true;
+		}
+
+		Player player = (Player) sender;
+
+		List<CChunkLoader> allChunks = EverNifeFunctions.getActivePremiumChunks();
+
+		if (allChunks.isEmpty()){
+			sender.sendMessage("Não existem ChunkLoaders Premium no servidor;");
+			return false;
+		}
+
+		List<CChunkLoader> nearChunks = new ArrayList<CChunkLoader>();
+		Location playerLocation = player.getLocation();
+
+		allChunks.forEach(cChunkLoader -> {
+			try{
+				if (!cChunkLoader.isExpired() && !cChunkLoader.markDisabled){
+					if (playerLocation.distance(cChunkLoader.getLoc().getLocation()) <= 600 ){
+						nearChunks.add(cChunkLoader);
+					}
+				}
+			}catch (Exception ignored){}
+		});
+
+		sender.sendMessage("--------- Near Premium Chunks ---------");
+		nearChunks.forEach(cChunkLoader ->
+				FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
+						.setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+						.setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+				));
+		return true;
+	}
 	
 	static String chunksInfo(OfflinePlayer player) {
 		IDataStore dataStore = DataStoreManager.getDataStore();
@@ -422,4 +551,10 @@ public class CommandExec implements CommandExecutor {
 				+ Messages.get("AlwaysOn") + " - " + ((BetterChunkLoader.hasPermission(player, "betterchunkloader.alwayson")) ? Messages.get("Free")+": "+freeAlwaysOn+" "+Messages.get("Used")+": "+(amountAlwaysOn-freeAlwaysOn)+" "+Messages.get("Total")+": "+amountAlwaysOn : Messages.get("MissingPermission"))+"\n"
 				+ Messages.get("OnlineOnly") + " - " + ((BetterChunkLoader.hasPermission(player, "betterchunkloader.onlineonly")) ? Messages.get("Free")+": "+freeOnlineOnly+" "+Messages.get("Used")+": "+(amountOnlineOnly-freeOnlineOnly)+" "+Messages.get("Total")+": "+amountOnlineOnly+"" : Messages.get("MissingPermission"));
 	}
+
+
+	//Translate ColorCodes
+	private static String tlc(String aString){
+	    return ChatColor.translateAlternateColorCodes('&',aString);
+    }
 }

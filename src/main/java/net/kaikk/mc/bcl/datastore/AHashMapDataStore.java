@@ -1,16 +1,11 @@
 package net.kaikk.mc.bcl.datastore;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import net.kaikk.mc.bcl.BlockLocation;
 import net.kaikk.mc.bcl.CChunkLoader;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
-
 import org.bukkit.Effect;
+
+import java.util.*;
 
 /** An implementation of IDataStore that stores data into HashMaps
  * It's abstract because it doesn't write any data on disk: all data will be lost at server shutdown

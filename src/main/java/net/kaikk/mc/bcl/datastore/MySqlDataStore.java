@@ -1,19 +1,11 @@
 package net.kaikk.mc.bcl.datastore;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
-
 import net.kaikk.mc.bcl.BetterChunkLoader;
 import net.kaikk.mc.bcl.CChunkLoader;
+
+import java.sql.*;
+import java.util.Date;
+import java.util.*;
 
 public class MySqlDataStore extends AHashMapDataStore {
 	private Connection dbConnection;
@@ -47,6 +39,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 					+ "loc varchar(50) NOT NULL, "
 					+ "r tinyint(3) unsigned NOT NULL, "
 					+ "owner binary(16) NOT NULL, "
+					+ "usn varchar(50) NOT NULL, "
 					+ "date bigint(20) NOT NULL, "
 					+ "aon tinyint(1) NOT NULL, "
 					+ "UNIQUE KEY loc (loc));");
@@ -65,7 +58,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 		try {
 			ResultSet rs = this.statement().executeQuery("SELECT * FROM bcl_chunkloaders");
 			while(rs.next()) {
-				CChunkLoader chunkLoader = new CChunkLoader(rs.getString(1), rs.getByte(2), toUUID(rs.getBytes(3)), new Date(rs.getLong(4)), rs.getBoolean(5));
+				CChunkLoader chunkLoader = new CChunkLoader(rs.getString(1), rs.getByte(2), toUUID(rs.getBytes(3)),rs.getString(4), new Date(rs.getLong(5)), rs.getBoolean(6));
 				List<CChunkLoader> clList = this.chunkLoaders.get(chunkLoader.getWorldName());
 				if (clList==null) {
 					clList=new ArrayList<CChunkLoader>();
@@ -95,7 +88,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 	public void addChunkLoader(CChunkLoader chunkLoader) {
 		super.addChunkLoader(chunkLoader);
 		try {
-			this.statement().executeUpdate("REPLACE INTO bcl_chunkloaders VALUES (\""+chunkLoader.getLocationString()+"\", "+chunkLoader.getRange()+", "+UUIDtoHexString(chunkLoader.getOwner())+", "+chunkLoader.getCreationDate().getTime()+", "+(chunkLoader.isAlwaysOn()?1:0)+")");
+			this.statement().executeUpdate("REPLACE INTO bcl_chunkloaders VALUES (\""+chunkLoader.getLocationString()+"\", "+chunkLoader.getRange()+", "+UUIDtoHexString(chunkLoader.getOwner())+", "+chunkLoader.getOwnerName()+", "+chunkLoader.getCreationDate().getTime()+", "+(chunkLoader.isAlwaysOn()?1:0)+")");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
