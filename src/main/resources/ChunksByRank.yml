@@ -1,0 +1,11 @@
+# All chunks allowed for each rank
+ChunksByRank:
+  Visitante: 9
+  Novato: 12
+  Membro: 16
+  Aprendiz: 20
+  Veterano: 25
+  Prodigio: 31
+  Genio: 37
+  Mito: 43
+  Lenda: 49

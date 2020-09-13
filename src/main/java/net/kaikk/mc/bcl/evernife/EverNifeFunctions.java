@@ -8,7 +8,6 @@ import java.util.List;
 
 public class EverNifeFunctions {
 
-
     public static List<CChunkLoader> getActivePremiumChunks(){
         List<CChunkLoader> clList = new ArrayList<CChunkLoader>();
         for (CChunkLoader aChunk : DataStoreManager.getDataStore().getChunkLoaders()){

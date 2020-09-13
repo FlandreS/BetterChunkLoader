@@ -1,11 +1,12 @@
-name: ${project.artifactId}
-main: ${package}.BetterChunkLoader
-version: ${project.version}
-depend: [ EverNifeCore, EverNifeRankUp ]
+name: BetterChunkLoader
+main: net.kaikk.mc.bcl.BetterChunkLoader
+version: 3.0.1a
+depend: [ EverNifeCore ]
+softdepend: [ BetterRankUp ]
 
 commands:
    betterchunkloader:
-      description: OP commands
+      description: BCL Commands
       aliases: [bcl]
 
 permissions:

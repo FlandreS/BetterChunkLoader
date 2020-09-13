@@ -2,6 +2,7 @@ package net.kaikk.mc.bcl.datastore;
 
 import net.kaikk.mc.bcl.BetterChunkLoader;
 import net.kaikk.mc.bcl.CChunkLoader;
+import net.kaikk.mc.bcl.config.data.BCLSettings;
 
 import java.sql.*;
 import java.util.Date;
@@ -128,7 +129,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 	public void setAlwaysOnChunksLimit(UUID playerId, int amount) {
 		super.setAlwaysOnChunksLimit(playerId, amount);
 		try {
-			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+amount+", "+BetterChunkLoader.instance().config().defaultChunksAmountOnlineOnly+") ON DUPLICATE KEY UPDATE alwayson="+amount);
+			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+amount+", "+ BCLSettings.defaultChunksAmountOnlineOnly+") ON DUPLICATE KEY UPDATE alwayson="+amount);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -138,7 +139,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 	public void setOnlineOnlyChunksLimit(UUID playerId, int amount) {
 		super.setOnlineOnlyChunksLimit(playerId, amount);
 		try {
-			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+BetterChunkLoader.instance().config().defaultChunksAmountAlwaysOn+", "+amount+") ON DUPLICATE KEY UPDATE onlineonly="+amount);
+			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+BCLSettings.defaultChunksAmountAlwaysOn+", "+amount+") ON DUPLICATE KEY UPDATE onlineonly="+amount);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -148,7 +149,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 	public void addAlwaysOnChunksLimit(UUID playerId, int amount) {
 		super.addAlwaysOnChunksLimit(playerId, amount);
 		try {
-			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+amount+", "+BetterChunkLoader.instance().config().defaultChunksAmountOnlineOnly+") ON DUPLICATE KEY UPDATE alwayson=alwayson+"+amount);
+			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+amount+", "+BCLSettings.defaultChunksAmountOnlineOnly+") ON DUPLICATE KEY UPDATE alwayson=alwayson+"+amount);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -158,7 +159,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 	public void addOnlineOnlyChunksLimit(UUID playerId, int amount) {
 		super.addOnlineOnlyChunksLimit(playerId, amount);
 		try {
-			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+BetterChunkLoader.instance().config().defaultChunksAmountAlwaysOn+", "+amount+") ON DUPLICATE KEY UPDATE onlineonly=onlineonly+"+amount);
+			this.statement().executeUpdate("INSERT INTO bcl_playersdata VALUES ("+UUIDtoHexString(playerId)+", "+BCLSettings.defaultChunksAmountAlwaysOn+", "+amount+") ON DUPLICATE KEY UPDATE onlineonly=onlineonly+"+amount);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -168,13 +169,13 @@ public class MySqlDataStore extends AHashMapDataStore {
 		if (this.dbConnection == null || this.dbConnection.isClosed()) {
 			// set username/pass properties
 			final Properties connectionProps = new Properties();
-			connectionProps.put("user", BetterChunkLoader.instance().config().mySqlUsername);
-			connectionProps.put("password", BetterChunkLoader.instance().config().mySqlPassword);
+			connectionProps.put("user", BCLSettings.mySqlUsername);
+			connectionProps.put("password", BCLSettings.mySqlPassword);
 			connectionProps.put("autoReconnect", "true");
 			connectionProps.put("maxReconnects", "4");
 
 			// establish connection
-			this.dbConnection = DriverManager.getConnection("jdbc:mysql://"+BetterChunkLoader.instance().config().mySqlHostname+"/"+BetterChunkLoader.instance().config().mySqlDatabase, connectionProps);
+			this.dbConnection = DriverManager.getConnection("jdbc:mysql://"+BCLSettings.mySqlHostname+"/"+BCLSettings.mySqlDatabase, connectionProps);
 		}
 	}
 	

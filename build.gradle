@@ -1,5 +1,5 @@
 group 'br.com.finalcraft'
-version '3.0.0a'
+version '3.0.1a'
 
 apply plugin: 'java'
 
@@ -30,9 +30,9 @@ dependencies {
     compile name: "Vault-1.4.1"
 
     compile name: "PlaceholderAPI"
-    compile name: "EverNifeRankUp-1.3.4"
+    compile name: "BetterRankUp-1.3.4"
 
-    compile name: "EverNifeCore-1.3.1a"
+    compile name: "EverNifeCore-1.3.3a"
 
     // compile name: "Thermos"
     // compile 'org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT'

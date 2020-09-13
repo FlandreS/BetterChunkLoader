@@ -1,5 +1,10 @@
 package net.kaikk.mc.bcl;
 
+import br.com.finalcraft.evernifecore.config.playerdata.PlayerController;
+import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
+import br.com.finalcraft.evernifecore.config.uuids.UUIDsController;
+import net.kaikk.mc.bcl.config.ConfigManager;
+import net.kaikk.mc.bcl.config.data.BCLSettings;
 import net.kaikk.mc.bcl.datastore.DataStoreManager;
 import net.kaikk.mc.bcl.datastore.MySqlDataStore;
 import net.kaikk.mc.bcl.datastore.XmlDataStore;
@@ -10,12 +15,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.UUID;
 
 public class BetterChunkLoader extends JavaPlugin {
 	private static BetterChunkLoader instance;
-	private Config config;
 	private static Permission permissions;
 	public boolean enabled;
 	
@@ -56,14 +59,14 @@ public class BetterChunkLoader extends JavaPlugin {
 			try {
 				// load config
 				this.getLogger().info("Loading config...");
-				this.config = new Config(this);
-				
+				ConfigManager.initialize(this);
+
 				// load messages localization
 				Messages.load(this, "messages.yml");
 				
 				// instantiate data store, if needed
-				if (DataStoreManager.getDataStore()==null || !DataStoreManager.getDataStore().getName().equals(config.dataStore)) {
-					DataStoreManager.setDataStoreInstance(config.dataStore);
+				if (DataStoreManager.getDataStore()==null || !DataStoreManager.getDataStore().getName().equals(BCLSettings.dataStore)) {
+					DataStoreManager.setDataStoreInstance(BCLSettings.dataStore);
 				}
 				
 				// load datastore
@@ -110,7 +113,9 @@ public class BetterChunkLoader extends JavaPlugin {
 	public void disable() {
 		if (this.enabled) {
 			for (CChunkLoader cl : DataStoreManager.getDataStore().getChunkLoaders()) {
-				BCLForgeLib.instance().removeChunkLoader(cl);
+				if (BCLForgeLib.instance().getChunkLoaders().containsValue(cl)){
+					BCLForgeLib.instance().removeChunkLoader(cl);
+				}
 			}
 			this.enabled = false;
 		}
@@ -121,28 +126,10 @@ public class BetterChunkLoader extends JavaPlugin {
 	}
 	
 	public static long getPlayerLastPlayed(UUID playerId) {
-		OfflinePlayer player = Bukkit.getOfflinePlayer(playerId);
-		if (player.getLastPlayed()!=0) {
-			return player.getLastPlayed();
-		} else if (player.getName()!=null && !player.getName().isEmpty()) {
-			return getPlayerDataLastModified(playerId);
-		}
-		
-		return 0;
+		PlayerData playerData = PlayerController.getPlayerData(UUIDsController.getNameFromUUID(playerId));
+		return playerData != null ? playerData.getLastSeen() : 0;
 	}
-	
-	public static long getPlayerDataLastModified(UUID playerId) {
-		File playerData =new File(Bukkit.getWorlds().get(0).getWorldFolder(), "playerdata"+File.separator+playerId.toString()+".dat");
-		if (playerData.exists()) {
-			return playerData.lastModified();
-		}
-		return 0;
-	}
-	
-	public Config config() {
-		return this.config;
-	}
-	
+
 	public static boolean hasPermission(OfflinePlayer player, String permission) {
 		try {
 			return permissions.playerHas(null, player, permission);

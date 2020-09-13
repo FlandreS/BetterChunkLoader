@@ -1,9 +1,9 @@
 package net.kaikk.mc.bcl.listeners;
 
-import br.com.finalcraft.everniferankup.api.FCRankUpAPI;
+import br.com.finalcraft.betterrankup.api.FCRankUpAPI;
 import net.kaikk.mc.bcl.BetterChunkLoader;
+import net.kaikk.mc.bcl.config.data.ChunksByRank;
 import net.kaikk.mc.bcl.datastore.DataStoreManager;
-import net.kaikk.mc.bcl.evernife.ChunksByRank;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +20,7 @@ public class PlayerListener implements Listener {
 			@Override
 			public void run() {
 				if (player.isOnline()){
-					int correctAmoutToHave = ChunksByRank.getAmout(FCRankUpAPI.getPlayerRank(player));
+					int correctAmoutToHave = ChunksByRank.getAmout(FCRankUpAPI.getRUPlayerData(player).getRankName());
 					int oldChunksAmout = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId()).getOnlineOnlyChunksAmount();
 					if ( oldChunksAmout != correctAmoutToHave){
 						DataStoreManager.getDataStore().setOnlineOnlyChunksLimit(player.getUniqueId(), correctAmoutToHave);

@@ -1,6 +1,6 @@
 package net.kaikk.mc.bcl.datastore;
 
-import net.kaikk.mc.bcl.BetterChunkLoader;
+import net.kaikk.mc.bcl.config.data.BCLSettings;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,8 +15,8 @@ public class PlayerData {
 	
 	public PlayerData(UUID playerId) {
 		this.playerId = playerId;
-		this.alwaysOnChunksAmount=BetterChunkLoader.instance().config().defaultChunksAmountAlwaysOn;
-		this.onlineOnlyChunksAmount=BetterChunkLoader.instance().config().defaultChunksAmountOnlineOnly;
+		this.alwaysOnChunksAmount= BCLSettings.defaultChunksAmountAlwaysOn;
+		this.onlineOnlyChunksAmount=BCLSettings.defaultChunksAmountOnlineOnly;
 	}
 
 	public PlayerData(UUID playerId, int alwaysOnChunksAmount, int onlineOnlyChunksAmount) {

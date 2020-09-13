@@ -1,5 +1,6 @@
 package net.kaikk.mc.bcl;
 
+import net.kaikk.mc.bcl.config.data.BCLSettings;
 import net.kaikk.mc.bcl.datastore.DataStoreManager;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.Material;
@@ -39,7 +40,7 @@ public class EventListener implements Listener {
 			return;
 		}
 		
-		if (clickedBlock.getType()==instance.config().alwaysOnMaterial  || clickedBlock.getType()==instance.config().onlineOnlyMaterial) {
+		if (clickedBlock.getType()== BCLSettings.alwaysOnMaterial  || clickedBlock.getType()==BCLSettings.onlineOnlyMaterial) {
             //player.sendMessage("Checker Valid Material");
             if (action==Action.RIGHT_CLICK_BLOCK) {
 				//player.sendMessage("Checker 1");
@@ -56,7 +57,7 @@ public class EventListener implements Listener {
 						if (canBreak(clickedBlock, player)) {
 							//player.sendMessage("Checker 3");
 							UUID uid=player.getUniqueId();
-							if (clickedBlock.getType()==instance.config().alwaysOnMaterial) {
+							if (clickedBlock.getType()==BCLSettings.alwaysOnMaterial) {
 								if (!player.hasPermission("betterchunkloader.alwayson")) {
 									player.sendMessage(Messages.get("NoPermissionToCreateAlwaysOnChunkLoaders") +(player.isOp()?" (betterchunkloader.alwayson is needed)":""));
 									return;
@@ -64,7 +65,7 @@ public class EventListener implements Listener {
 								if (player.isSneaking() && player.hasPermission("betterchunkloader.adminloader")) {
 									uid=CChunkLoader.adminUUID;
 								}
-							} else if (clickedBlock.getType()==instance.config().onlineOnlyMaterial) {
+							} else if (clickedBlock.getType()==BCLSettings.onlineOnlyMaterial) {
 								if (!player.hasPermission("betterchunkloader.onlineonly")) {
 									player.sendMessage(Messages.get("NoPermissionToCreateOnlineOnlyChunkLoaders")+(player.isOp()?" (betterchunkloader.onlineonly is needed)":""));
 									return;
@@ -73,7 +74,7 @@ public class EventListener implements Listener {
 								return;
 							}
 
-							chunkLoader = new CChunkLoader((int) (Math.floor(clickedBlock.getX()/16.00)), (int) (Math.floor(clickedBlock.getZ()/16.00)), clickedBlock.getWorld().getName(), (byte) -1, uid,player.getName(), new BlockLocation(clickedBlock), null, (clickedBlock.getType() == instance.config().alwaysOnMaterial));
+							chunkLoader = new CChunkLoader((int) (Math.floor(clickedBlock.getX()/16.00)), (int) (Math.floor(clickedBlock.getZ()/16.00)), clickedBlock.getWorld().getName(), (byte) -1, uid,player.getName(), new BlockLocation(clickedBlock), null, (clickedBlock.getType() == BCLSettings.alwaysOnMaterial));
 							chunkLoader.showUI(player);
 						} else {
 							player.sendMessage(Messages.get("NoBuildPermission"));
@@ -86,7 +87,7 @@ public class EventListener implements Listener {
 							chunkLoader.showCorners(player);
 						}
 					} else {
-						if (player.getItemInHand().getType()!=instance.config().alwaysOnMaterial && player.getItemInHand().getType()!=instance.config().onlineOnlyMaterial) {
+						if (player.getItemInHand().getType()!=BCLSettings.alwaysOnMaterial && player.getItemInHand().getType()!=BCLSettings.onlineOnlyMaterial) {
 							player.sendMessage(Messages.get("CanCreateChunkLoaders"));
 						}
 					}
@@ -99,7 +100,7 @@ public class EventListener implements Listener {
 	@EventHandler(ignoreCancelled=true, priority = EventPriority.HIGH)
 	void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
-		if (block==null || (block.getType()!=instance.config().alwaysOnMaterial && block.getType()!=instance.config().onlineOnlyMaterial)) {
+		if (block==null || (block.getType()!=BCLSettings.alwaysOnMaterial && block.getType()!=BCLSettings.onlineOnlyMaterial)) {
 			return;
 		}
 

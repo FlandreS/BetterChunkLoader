@@ -1,7 +1,8 @@
 package net.kaikk.mc.bcl;
 
-import br.com.finalcraft.evernifecore.FCBukkitUtil;
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
+import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
+import net.kaikk.mc.bcl.config.data.BCLSettings;
 import net.kaikk.mc.bcl.datastore.DataStoreManager;
 import net.kaikk.mc.bcl.datastore.IDataStore;
 import net.kaikk.mc.bcl.datastore.PlayerData;
@@ -300,17 +301,17 @@ public class CommandExec implements CommandExecutor {
 			if (args[1].equalsIgnoreCase("add")) {
 				PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
 				if (args[3].equalsIgnoreCase("alwayson")) {
-					if (playerData.getAlwaysOnChunksAmount()+amount>this.instance.config().maxChunksAmountAlwaysOn) {
-						sender.sendMessage("Couldn't add " + amount + " always-on chunks to "+player.getName()+" because it would exceed the always-on chunks limit of "+this.instance.config().maxChunksAmountAlwaysOn);
-						amount = this.instance.config().maxChunksAmountAlwaysOn = playerData.getAlwaysOnChunksAmount();
+					if (playerData.getAlwaysOnChunksAmount()+amount> BCLSettings.maxChunksAmountAlwaysOn) {
+						sender.sendMessage("Couldn't add " + amount + " always-on chunks to "+player.getName()+" because it would exceed the always-on chunks limit of "+BCLSettings.maxChunksAmountAlwaysOn);
+						amount = BCLSettings.maxChunksAmountAlwaysOn = playerData.getAlwaysOnChunksAmount();
 					}
 
 					DataStoreManager.getDataStore().addAlwaysOnChunksLimit(player.getUniqueId(), amount);
 					sender.sendMessage("Added "+amount+" always-on chunks to "+player.getName());
 				} else if (args[3].equalsIgnoreCase("onlineonly")) {
-					if (playerData.getOnlineOnlyChunksAmount()+amount>this.instance.config().maxChunksAmountOnlineOnly) {
-						sender.sendMessage("Couldn't add " + amount + " online-only chunks to "+player.getName()+" because it would exceed the online-only chunks limit of "+this.instance.config().maxChunksAmountOnlineOnly);
-						amount = this.instance.config().maxChunksAmountAlwaysOn = playerData.getOnlineOnlyChunksAmount();
+					if (playerData.getOnlineOnlyChunksAmount()+amount>BCLSettings.maxChunksAmountOnlineOnly) {
+						sender.sendMessage("Couldn't add " + amount + " online-only chunks to "+player.getName()+" because it would exceed the online-only chunks limit of "+BCLSettings.maxChunksAmountOnlineOnly);
+						amount = BCLSettings.maxChunksAmountAlwaysOn = playerData.getOnlineOnlyChunksAmount();
 					}
 					DataStoreManager.getDataStore().addOnlineOnlyChunksLimit(player.getUniqueId(), amount);
 					sender.sendMessage("Added "+amount+" online-only chunks to "+player.getName());
