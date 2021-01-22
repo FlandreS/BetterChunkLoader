@@ -1,7 +1,7 @@
-package net.kaikk.mc.bcl.datastore;
+package br.com.finalcraft.betterchunkloader.datastore;
 
-import net.kaikk.mc.bcl.BetterChunkLoader;
-import net.kaikk.mc.bcl.CChunkLoader;
+import br.com.finalcraft.betterchunkloader.BetterChunkLoader;
+import br.com.finalcraft.betterchunkloader.CChunkLoader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

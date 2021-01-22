@@ -1,7 +1,7 @@
-package net.kaikk.mc.bcl;
+package br.com.finalcraft.betterchunkloader;
 
 import me.clip.placeholderapi.external.EZPlaceholderHook;
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
+import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

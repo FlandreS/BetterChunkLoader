@@ -1,7 +1,8 @@
-package net.kaikk.mc.bcl.config;
+package br.com.finalcraft.betterchunkloader.config;
 
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 import br.com.finalcraft.evernifecore.config.Config;
-import net.kaikk.mc.bcl.config.data.BCLSettings;
+import br.com.finalcraft.evernifecore.locale.FCLocaleClassScanner;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ConfigManager {
@@ -22,5 +23,7 @@ public class ConfigManager {
         chunksByRank    = new Config(instance,"ChunksByRank.yml", true);
 
         BCLSettings.initialize();
+
+        FCLocaleClassScanner.scanForLocale(instance, LocaleMananger.class);
     }
 }

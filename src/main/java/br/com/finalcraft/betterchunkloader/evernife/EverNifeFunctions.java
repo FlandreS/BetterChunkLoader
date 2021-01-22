@@ -1,7 +1,7 @@
-package net.kaikk.mc.bcl.evernife;
+package br.com.finalcraft.betterchunkloader.evernife;
 
-import net.kaikk.mc.bcl.CChunkLoader;
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
+import br.com.finalcraft.betterchunkloader.CChunkLoader;
+import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 
 import java.util.ArrayList;
 import java.util.List;

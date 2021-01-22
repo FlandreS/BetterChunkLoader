@@ -1,6 +1,6 @@
-package net.kaikk.mc.bcl.datastore;
+package br.com.finalcraft.betterchunkloader.datastore;
 
-import net.kaikk.mc.bcl.config.data.BCLSettings;
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;

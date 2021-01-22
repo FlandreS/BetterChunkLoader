@@ -1,7 +1,7 @@
-package net.kaikk.mc.bcl;
+package br.com.finalcraft.betterchunkloader;
 
-import net.kaikk.mc.bcl.config.data.BCLSettings;
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
+import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

@@ -1,7 +1,7 @@
-package net.kaikk.mc.bcl.datastore;
+package br.com.finalcraft.betterchunkloader.datastore;
 
-import net.kaikk.mc.bcl.BlockLocation;
-import net.kaikk.mc.bcl.CChunkLoader;
+import br.com.finalcraft.betterchunkloader.BlockLocation;
+import br.com.finalcraft.betterchunkloader.CChunkLoader;
 
 import java.util.List;
 import java.util.UUID;

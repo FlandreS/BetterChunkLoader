@@ -1,7 +1,7 @@
-package net.kaikk.mc.bcl;
+package br.com.finalcraft.betterchunkloader;
 
 import br.com.finalcraft.evernifecore.config.uuids.UUIDsController;
-import net.kaikk.mc.bcl.config.data.BCLSettings;
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 import net.kaikk.mc.bcl.forgelib.ChunkLoader;
 import org.bukkit.*;
 import org.bukkit.block.Block;

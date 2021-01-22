@@ -1,8 +1,8 @@
-package net.kaikk.mc.bcl.datastore;
+package br.com.finalcraft.betterchunkloader.datastore;
 
-import net.kaikk.mc.bcl.BetterChunkLoader;
-import net.kaikk.mc.bcl.CChunkLoader;
-import net.kaikk.mc.bcl.config.data.BCLSettings;
+import br.com.finalcraft.betterchunkloader.BetterChunkLoader;
+import br.com.finalcraft.betterchunkloader.CChunkLoader;
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 
 import java.sql.*;
 import java.util.Date;

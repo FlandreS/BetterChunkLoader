@@ -1,7 +1,7 @@
-package net.kaikk.mc.bcl.config.data;
+package br.com.finalcraft.betterchunkloader.config.data;
 
-import net.kaikk.mc.bcl.BetterChunkLoader;
-import net.kaikk.mc.bcl.config.ConfigManager;
+import br.com.finalcraft.betterchunkloader.BetterChunkLoader;
+import br.com.finalcraft.betterchunkloader.config.ConfigManager;
 import org.bukkit.Material;
 
 public class BCLSettings {

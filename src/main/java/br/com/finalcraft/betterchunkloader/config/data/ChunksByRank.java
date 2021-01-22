@@ -1,6 +1,6 @@
-package net.kaikk.mc.bcl.config.data;
+package br.com.finalcraft.betterchunkloader.config.data;
 
-import net.kaikk.mc.bcl.config.ConfigManager;
+import br.com.finalcraft.betterchunkloader.config.ConfigManager;
 
 import java.util.HashMap;
 import java.util.Map;

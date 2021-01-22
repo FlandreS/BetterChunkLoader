@@ -1,9 +1,9 @@
-package net.kaikk.mc.bcl.listeners;
+package br.com.finalcraft.betterchunkloader.listeners;
 
+import br.com.finalcraft.betterchunkloader.BetterChunkLoader;
 import br.com.finalcraft.betterrankup.api.FCRankUpAPI;
-import net.kaikk.mc.bcl.BetterChunkLoader;
-import net.kaikk.mc.bcl.config.data.ChunksByRank;
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
+import br.com.finalcraft.betterchunkloader.config.data.ChunksByRank;
+import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

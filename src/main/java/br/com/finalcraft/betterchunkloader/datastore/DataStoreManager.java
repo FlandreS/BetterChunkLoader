@@ -1,4 +1,4 @@
-package net.kaikk.mc.bcl.datastore;
+package br.com.finalcraft.betterchunkloader.datastore;
 
 import java.util.*;
 

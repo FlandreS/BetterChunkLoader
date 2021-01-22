@@ -1,15 +1,15 @@
-package net.kaikk.mc.bcl;
+package br.com.finalcraft.betterchunkloader;
 
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerController;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.config.uuids.UUIDsController;
-import net.kaikk.mc.bcl.config.ConfigManager;
-import net.kaikk.mc.bcl.config.data.BCLSettings;
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
-import net.kaikk.mc.bcl.datastore.MySqlDataStore;
-import net.kaikk.mc.bcl.datastore.XmlDataStore;
+import br.com.finalcraft.betterchunkloader.config.ConfigManager;
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
+import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
+import br.com.finalcraft.betterchunkloader.datastore.MySqlDataStore;
+import br.com.finalcraft.betterchunkloader.datastore.XmlDataStore;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
-import net.kaikk.mc.bcl.listeners.PlayerListener;
+import br.com.finalcraft.betterchunkloader.listeners.PlayerListener;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

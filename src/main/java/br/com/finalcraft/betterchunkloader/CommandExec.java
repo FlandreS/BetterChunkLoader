@@ -1,12 +1,12 @@
-package net.kaikk.mc.bcl;
+package br.com.finalcraft.betterchunkloader;
 
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
 import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
-import net.kaikk.mc.bcl.config.data.BCLSettings;
-import net.kaikk.mc.bcl.datastore.DataStoreManager;
-import net.kaikk.mc.bcl.datastore.IDataStore;
-import net.kaikk.mc.bcl.datastore.PlayerData;
-import net.kaikk.mc.bcl.evernife.EverNifeFunctions;
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
+import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
+import br.com.finalcraft.betterchunkloader.datastore.IDataStore;
+import br.com.finalcraft.betterchunkloader.datastore.PlayerData;
+import br.com.finalcraft.betterchunkloader.evernife.EverNifeFunctions;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -64,12 +64,12 @@ public class CommandExec implements CommandExecutor {
 			}
 
             sender.sendMessage(tlc("&6---------- BCL ----------"));
-            sender.sendMessage(tlc(" &a&l- &a&n/" + label + " info &a- Mostra informações gerais."));
             sender.sendMessage(tlc(" &a&l- &a&n/" + label + " list &a- Lista todas os ChunkLoaders."));
 			sender.sendMessage(tlc(" &a&l- &a&n/" + label + " chunks &a- Alterar ou ver Chunks de um jogador."));
 			sender.sendMessage(tlc(" &a&l- &a&n/" + label + " removertudo &a- Remove todos os seus chunkloaders."));
 
             if (sender.hasPermission("betterchunkloader.delete")){
+				sender.sendMessage(tlc(" &a&l- &a&n/" + label + " info &a- Mostra informações gerais."));
 				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " delete &a- Deleta as chunks de um jogador."));
 				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " purge &a- Limpa os chunkloaders incorretos"));
 				sender.sendMessage(tlc(" &b&l- &b&n/" + label + " enable &a- Ativa o Plugin"));

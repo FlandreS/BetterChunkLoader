@@ -1,4 +1,4 @@
-package net.kaikk.mc.bcl;
+package br.com.finalcraft.betterchunkloader;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
