@@ -8,13 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerLogin(PlayerLoginEvent event){
+	public void onPlayerLogin(PlayerJoinEvent event){
 		final Player player = event.getPlayer();
 		new BukkitRunnable(){
 			@Override
@@ -28,6 +28,6 @@ public class PlayerListener implements Listener {
 					}
 				}
 			}
-		}.runTaskLaterAsynchronously(BetterChunkLoader.instance(),1200);
+		}.runTaskLater(BetterChunkLoader.instance(),20);
 	}
 }

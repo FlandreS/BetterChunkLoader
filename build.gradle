@@ -1,5 +1,5 @@
 group 'br.com.finalcraft'
-version '3.0.1a'
+version '3.1.1a'
 
 apply plugin: 'java'
 
