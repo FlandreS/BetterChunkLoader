@@ -1,0 +1,14 @@
+package br.com.finalcraft.betterchunkloader.commands;
+
+import br.com.finalcraft.evernifecore.commands.finalcmd.FinalCMD;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class CommandRegisterer {
+
+    public static void registerCommands(JavaPlugin pluginInstance) {
+
+        FinalCMD.registerCommand(pluginInstance, CMDChunkLoader.class);
+
+    }
+
+}

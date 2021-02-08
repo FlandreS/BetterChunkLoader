@@ -1,5 +1,6 @@
 package br.com.finalcraft.betterchunkloader;
 
+import br.com.finalcraft.betterchunkloader.commands.CommandRegisterer;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerController;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.config.uuids.UUIDsController;
@@ -89,12 +90,12 @@ public class BetterChunkLoader extends JavaPlugin {
 				
 				this.getLogger().info("Loading Listeners...");
 				this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
-				if (Bukkit.getPluginManager().isPluginEnabled("EverNifeRankUp")){
+				if (Bukkit.getPluginManager().isPluginEnabled("BetterRankUp")){
 					this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 				}
 
-				this.getCommand("betterchunkloader").setExecutor(new CommandExec(this));
-				
+				CommandRegisterer.registerCommands(this);
+
 				this.getLogger().info("Load complete.");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -107,7 +108,6 @@ public class BetterChunkLoader extends JavaPlugin {
 	
 	public void onDisable() {
 		this.disable();
-		instance=null;
 	}
 	
 	public void disable() {
