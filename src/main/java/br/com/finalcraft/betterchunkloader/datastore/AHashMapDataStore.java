@@ -2,6 +2,7 @@ package br.com.finalcraft.betterchunkloader.datastore;
 
 import br.com.finalcraft.betterchunkloader.BlockLocation;
 import br.com.finalcraft.betterchunkloader.CChunkLoader;
+import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.Effect;
 
@@ -151,13 +152,13 @@ public abstract class AHashMapDataStore implements IDataStore {
 	@Override
 	public void addAlwaysOnChunksLimit(UUID playerId, int amount) {
 		PlayerData playerData = this.getPlayerData(playerId);
-		playerData.setAlwaysOnChunksAmount(playerData.getAlwaysOnChunksAmount()+amount);
+		playerData.setAlwaysOnChunksAmount(Math.min(playerData.getAlwaysOnChunksAmount()+amount, BCLSettings.maxChunksAmountAlwaysOn));
 	}
 
 	@Override
 	public void addOnlineOnlyChunksLimit(UUID playerId, int amount) {
 		PlayerData playerData = this.getPlayerData(playerId);
-		playerData.setOnlineOnlyChunksAmount(playerData.getOnlineOnlyChunksAmount()+amount);
+		playerData.setOnlineOnlyChunksAmount(Math.min(playerData.getOnlineOnlyChunksAmount()+amount, BCLSettings.maxChunksAmountOnlineOnly));
 	}
 	
 	@Override
