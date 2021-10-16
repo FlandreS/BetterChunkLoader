@@ -14,7 +14,6 @@ tasks.withType(JavaCompile) {
 repositories {
     flatDir {
         dirs 'libs'
-        dirs 'C:/Users/Petrus/Desktop/Meus/workshop/workshop/PublicLibs/Bukkit'
     }
     mavenCentral()
     maven {
