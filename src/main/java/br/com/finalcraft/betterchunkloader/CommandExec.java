@@ -1,12 +1,12 @@
 package br.com.finalcraft.betterchunkloader;
 
-import br.com.finalcraft.evernifecore.fancytext.FancyText;
-import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
 import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import br.com.finalcraft.betterchunkloader.datastore.IDataStore;
 import br.com.finalcraft.betterchunkloader.datastore.PlayerData;
 import br.com.finalcraft.betterchunkloader.evernife.EverNifeFunctions;
+import br.com.finalcraft.evernifecore.fancytext.FancyText;
+import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -451,7 +451,7 @@ public class CommandExec implements CommandExecutor {
 		EverNifeFunctions.getActivePremiumChunks().forEach(cChunkLoader ->
 				FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
 						.setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-						.setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+						.setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
 				));
 		return true;
 	}
@@ -486,7 +486,7 @@ public class CommandExec implements CommandExecutor {
 			playersChunks.forEach(cChunkLoader ->
 					FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
 							.setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-							.setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+							.setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
 					));
 		}
 		sender.sendMessage("");
@@ -535,7 +535,7 @@ public class CommandExec implements CommandExecutor {
 		nearChunks.forEach(cChunkLoader ->
 				FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
 						.setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-						.setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+						.setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
 				));
 		return true;
 	}
