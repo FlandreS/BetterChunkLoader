@@ -1,11 +1,48 @@
-# All chunks allowed for each rank
-ChunksByRank:
-  Visitante: 9
-  Novato: 12
-  Membro: 16
-  Aprendiz: 20
-  Veterano: 25
-  Prodigio: 31
-  Genio: 37
-  Mito: 43
-  Lenda: 49
+Settings:
+  enableRankLimit: false
+
+#The order here matter!
+#The permission is checked from latest one to the first one!
+#So, if a player has two permission (in this case, is inside two different groups)
+#the latest LIMITER has priority over the first one
+#
+#
+# ChunkLimiter will always respect the "config.yml" limit
+#
+ChunkLimiter:
+  Visitante:
+    onlineOnly: 9
+    alwaysOn: 9
+    permission: group.default
+  Novato:
+    onlineOnly: 12
+    alwaysOn: 9
+    permission: group.novato
+  Membro:
+    onlineOnly: 16
+    alwaysOn: 9
+    permission: group.membro
+  Aprendiz:
+    onlineOnly: 20
+    alwaysOn: 9
+    permission: group.aprendiz
+  Veterano:
+    onlineOnly: 25
+    alwaysOn: 9
+    permission: group.veterano
+  Prodigio:
+    onlineOnly: 31
+    alwaysOn: 9
+    permission: group.prodigio
+  Genio:
+    onlineOnly: 37
+    alwaysOn: 9
+    permission: group.genio
+  Mito:
+    onlineOnly: 43
+    alwaysOn: 9
+    permission: group.mito
+  Lenda:
+    onlineOnly: 49
+    alwaysOn: 9
+    permission: group.lenda

@@ -1,9 +1,10 @@
 package br.com.finalcraft.betterchunkloader.listeners;
 
 import br.com.finalcraft.betterchunkloader.BetterChunkLoader;
-import br.com.finalcraft.betterrankup.api.FCRankUpAPI;
 import br.com.finalcraft.betterchunkloader.config.data.ChunksByRank;
+import br.com.finalcraft.betterchunkloader.config.data.RankLimiter;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
+import br.com.finalcraft.betterchunkloader.datastore.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,19 +16,38 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerLogin(PlayerJoinEvent event){
+
+		if (ChunksByRank.enableRankLimit == false){
+			return;
+		}
+
 		final Player player = event.getPlayer();
 		new BukkitRunnable(){
 			@Override
 			public void run() {
 				if (player.isOnline()){
-					int correctAmoutToHave = ChunksByRank.getAmout(FCRankUpAPI.getRUPlayerData(player).getRankName());
-					int oldChunksAmout = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId()).getOnlineOnlyChunksAmount();
-					if ( oldChunksAmout != correctAmoutToHave){
-						DataStoreManager.getDataStore().setOnlineOnlyChunksLimit(player.getUniqueId(), correctAmoutToHave);
-						BetterChunkLoader.instance().getLogger().info("Corrigindo chunks do jogador " + player.getName() + " de " + oldChunksAmout + " para " + correctAmoutToHave);
+
+					RankLimiter rankLimiter = ChunksByRank.getPlayerLimit(player);
+
+					if (rankLimiter != null){
+						PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
+
+						int currentOnlineOnly = playerData.getOnlineOnlyChunksAmount();
+						int currentAlwaysOn = playerData.getAlwaysOnChunksAmount();
+
+						if (currentOnlineOnly != rankLimiter.getOnlineOnly()){
+							DataStoreManager.getDataStore().setOnlineOnlyChunksLimit(player.getUniqueId(), rankLimiter.getOnlineOnly());
+							BetterChunkLoader.instance().getLogger().info("Fixing [OnlineOnly Chunks]' amount of " + player.getName() + " from " + currentOnlineOnly + " to " + rankLimiter.getOnlineOnly());
+						}
+
+						if (currentAlwaysOn != rankLimiter.getAlwaysOn()){
+							DataStoreManager.getDataStore().setAlwaysOnChunksLimit(player.getUniqueId(), rankLimiter.getAlwaysOn());
+							BetterChunkLoader.instance().getLogger().info("Fixing [AlwaysOn Chunks]' amount of " + player.getName() + " from " + currentAlwaysOn + " to " + rankLimiter.getAlwaysOn());
+						}
 					}
+
 				}
 			}
-		}.runTaskLater(BetterChunkLoader.instance(),20);
+		}.runTaskLaterAsynchronously(BetterChunkLoader.instance(),20);
 	}
 }
