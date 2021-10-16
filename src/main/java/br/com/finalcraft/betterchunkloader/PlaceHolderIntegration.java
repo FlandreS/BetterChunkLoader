@@ -1,7 +1,7 @@
 package br.com.finalcraft.betterchunkloader;
 
-import me.clip.placeholderapi.external.EZPlaceholderHook;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
+import me.clip.placeholderapi.external.EZPlaceholderHook;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

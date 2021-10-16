@@ -30,5 +30,4 @@ public class EverNifeFunctions {
         return clList;
     }
 
-
 }
