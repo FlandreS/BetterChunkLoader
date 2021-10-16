@@ -11,6 +11,9 @@ import br.com.finalcraft.evernifecore.argumento.MultiArgumentos;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.FinalCMD;
 import br.com.finalcraft.evernifecore.commands.finalcmd.help.HelpLine;
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
+import br.com.finalcraft.evernifecore.locale.FCLocale;
+import br.com.finalcraft.evernifecore.locale.LocaleMessage;
+import br.com.finalcraft.evernifecore.locale.LocaleType;
 import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
 import br.com.finalcraft.evernifecore.util.FCMessageUtil;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
@@ -28,9 +31,21 @@ import java.util.List;
 )
 public class CMDChunkLoader {
 
+    @FCLocale(lang = LocaleType.EN_US, text = "§2    ▶ §aChunkLoaders Available §e(Online Only): §6%free_chunks%§7§l/§a%total_free_chunks%")
+    @FCLocale(lang = LocaleType.PT_BR, text = "§2    ▶ §aChunkLoaders Disponíveis §e(Normal): §6%free_chunks%§7§l/§a%total_free_chunks%")
+    public static LocaleMessage AVAILABLE_CHUNKS_ONLINE_ONLY;
+
+    @FCLocale(lang = LocaleType.EN_US, text = "§2    ▶ §aChunkLoaders Available §b(Always On): §6%premium_chunks%§7§l/§a%total_premium_chunks%")
+    @FCLocale(lang = LocaleType.PT_BR, text = "§2    ▶ §aChunkLoaders Disponíveis §b(Permanente): §6%premium_chunks%§7§l/§a%total_premium_chunks%")
+    public static LocaleMessage AVAILABLE_CHUNKS_ALWAYS_ON;
+
+
     @FinalCMD.SubCMD(
             subcmd = {"info"},
-            desc = "Mostra suas informações"
+            locales = {
+                    @FCLocale(lang = LocaleType.EN_US, text = "Show your info"),
+                    @FCLocale(lang = LocaleType.PT_BR, text = "Mostra suas informações")
+            }
     )
     public void info(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
 
@@ -41,30 +56,63 @@ public class CMDChunkLoader {
                 return;
             }
             PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(fcPlayerData.getUniqueId());
+
             int free_chunks = DataStoreManager.getDataStore().getOnlineOnlyFreeChunksAmount(fcPlayerData.getUniqueId());
+            int total_free_chunks = playerData.getOnlineOnlyChunksAmount();
+
             int premium_chunks = DataStoreManager.getDataStore().getAlwaysOnFreeChunksAmount(fcPlayerData.getUniqueId());
+            int total_premium_chunks = playerData.getAlwaysOnChunksAmount();
+
             sender.sendMessage("§a§m-----------------------------------------------------");
             sender.sendMessage("§a  ▶ [" + fcPlayerData.getPlayerName() + "] BCL Info:");
-            sender.sendMessage("§2    ▶ §aChunkLoaders Disponíveis §e(Normal): §6" + free_chunks + "§7§l/§a" + playerData.getOnlineOnlyChunksAmount());
-            sender.sendMessage("§2    ▶ §aChunkLoaders Disponíveis §b(Permanente): §6" + premium_chunks + "§7§l/§a" + playerData.getAlwaysOnChunksAmount());
+            AVAILABLE_CHUNKS_ONLINE_ONLY
+                    .addPlaceholder("%free_chunks%", free_chunks)
+                    .addPlaceholder("%total_free_chunks%", total_free_chunks)
+                    .send(sender);
+            AVAILABLE_CHUNKS_ALWAYS_ON
+                    .addPlaceholder("%premium_chunks%", premium_chunks)
+                    .addPlaceholder("%total_premium_chunks%", total_premium_chunks)
+                    .send(sender);
             sender.sendMessage("§a§m-----------------------------------------------------");
         }
 
         Player player = (Player) sender;
         PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
+
         int free_chunks = DataStoreManager.getDataStore().getOnlineOnlyFreeChunksAmount(player.getUniqueId());
+        int total_free_chunks = playerData.getOnlineOnlyChunksAmount();
+
         int premium_chunks = DataStoreManager.getDataStore().getAlwaysOnFreeChunksAmount(player.getUniqueId());
+        int total_premium_chunks = playerData.getAlwaysOnChunksAmount();
+
         player.sendMessage("§a§m-----------------------------------------------------");
-        player.sendMessage("§2  ▶ §aChunkLoaders Disponíveis §e(Normal): §6" + free_chunks + "§7§l/§a" + playerData.getOnlineOnlyChunksAmount());
-        player.sendMessage("§2  ▶ §aChunkLoaders Disponíveis §b(Permanente): §6" + premium_chunks + "§7§l/§a" + playerData.getAlwaysOnChunksAmount());
+        AVAILABLE_CHUNKS_ONLINE_ONLY
+                .addPlaceholder("%free_chunks%", free_chunks)
+                .addPlaceholder("%total_free_chunks%", total_free_chunks)
+                .send(sender);
+        AVAILABLE_CHUNKS_ALWAYS_ON
+                .addPlaceholder("%premium_chunks%", premium_chunks)
+                .addPlaceholder("%total_premium_chunks%", total_premium_chunks)
+                .send(sender);
         player.sendMessage("§a§m-----------------------------------------------------");
         return;
     }
 
+    @FCLocale(lang = LocaleType.EN_US, text = "§2 ▶ §2ChunkLoaders being used §e(Normal): §6%free_chunks%§7§l/§a%total_free_chunks%")
+    @FCLocale(lang = LocaleType.PT_BR, text = "§2 ▶ §2ChunkLoaders em USO §e(Normal): §6%free_chunks%§7§l/§a%total_free_chunks%")
+    public static LocaleMessage CHUNKS_IN_USE_ONLINE_ONLY;
+
+    @FCLocale(lang = LocaleType.EN_US, text = "§2 ▶ §2ChunkLoaders being used §b(Permanente): §6§6%free_chunks%§7§l/§a%total_premium_chunks%")
+    @FCLocale(lang = LocaleType.PT_BR, text = "§2 ▶ §2ChunkLoaders em USO §b(Permanente): §6%free_chunks%§7§l/§a%total_premium_chunks%")
+    public static LocaleMessage CHUNKS_IN_USE_ALWAYS_ON;
+
     @FinalCMD.SubCMD(
             subcmd = {"list"},
-            usage = "<Normal|Permanente>",
-            desc = "Lista todas os seus ChunkLoaders"
+            usage = "<Normal|Perma>",
+            locales = {
+                    @FCLocale(lang = LocaleType.EN_US, text = "List all your chunkloaders"),
+                    @FCLocale(lang = LocaleType.PT_BR, text = "Lista todas os seus ChunkLoaders")
+            }
     )
     public void list(Player player, String label, MultiArgumentos argumentos, HelpLine helpLine) {
 
@@ -82,6 +130,7 @@ public class CMDChunkLoader {
             case "comum":
             case "onlineonly":
                 int free_chunks = 0;
+                int total_free_chunks = playerData.getOnlineOnlyChunksAmount();
                 player.sendMessage("§a§m-----------------------------------------------------");
                 for (CChunkLoader chunkLoader : chunkLoaderList) {
                     if (!chunkLoader.isAlwaysOn()){
@@ -89,14 +138,18 @@ public class CMDChunkLoader {
                         if (player.hasPermission(PermissionNodes.COMMAND_ADMIN)){
                             FancyText.sendTo(player,
                                     new FancyText("§7  - §e[" + chunkLoader.sizeX() + "] " + chunkLoader.getLoc().toString())
-                                            .setRunCommandActionText("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
+                                            .setRunCommandAction("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
                             );
                         }else {
                             player.sendMessage("§7  - §e[" + chunkLoader.sizeX() + "] " + chunkLoader.getLoc().toString());
                         }
                     }
                 }
-                player.sendMessage("\n§2 ▶ §2ChunkLoaders em USO §e(Normal): §6" + free_chunks + "§7§l/§a" + playerData.getOnlineOnlyChunksAmount());
+                player.sendMessage("");
+                CHUNKS_IN_USE_ONLINE_ONLY
+                        .addPlaceholder("%free_chunks%", free_chunks)
+                        .addPlaceholder("%total_free_chunks%", total_free_chunks)
+                        .send(player);
                 player.sendMessage("§a§m-----------------------------------------------------");
                 break;
             case "vip":
@@ -104,6 +157,7 @@ public class CMDChunkLoader {
             case "permanente":
             case "alwayson":
                 int premium_chunks = 0;
+                int total_premium_chunks = playerData.getAlwaysOnChunksAmount();
                 player.sendMessage("§a§m-----------------------------------------------------");
                 for (CChunkLoader chunkLoader : chunkLoaderList) {
                     if (chunkLoader.isAlwaysOn()){
@@ -111,14 +165,18 @@ public class CMDChunkLoader {
                         if (player.hasPermission(PermissionNodes.COMMAND_ADMIN)){
                             FancyText.sendTo(player,
                                     new FancyText("§7  - §b[" + chunkLoader.sizeX() + "] " + chunkLoader.getLoc().toString())
-                                            .setRunCommandActionText("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
+                                            .setRunCommandAction("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
                             );
                         }else {
                             player.sendMessage("§7  - §b[" + chunkLoader.sizeX() + "] " + chunkLoader.getLoc().toString());
                         }
                     }
                 }
-                player.sendMessage("\n§2 ▶ §2ChunkLoaders em USO §b(Permanente): §6" + premium_chunks + "§7§l/§a" + playerData.getAlwaysOnChunksAmount());
+                player.sendMessage("");
+                CHUNKS_IN_USE_ALWAYS_ON
+                        .addPlaceholder("%premium_chunks%", premium_chunks)
+                        .addPlaceholder("%total_premium_chunks%", total_premium_chunks)
+                        .send(player);
                 player.sendMessage("§a§m-----------------------------------------------------");
                 break;
         }
@@ -128,9 +186,12 @@ public class CMDChunkLoader {
 
     @FinalCMD.SubCMD(
             subcmd = {"listother"},
-            usage = "%name% <Player> <Normal|Permanente>",
+            usage = "%name% <Player> <Normal|Perma>",
             permission = PermissionNodes.COMMAND_LIST_OTHER,
-            desc = "Lista todos os ChunkLoaders de um jogador especifico."
+            locales = {
+                    @FCLocale(lang = LocaleType.EN_US, text = "List all chunkloaders from a specific player."),
+                    @FCLocale(lang = LocaleType.PT_BR, text = "Lista todos os ChunkLoaders de um jogador especifico.")
+            }
     )
     public void listother(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
 
@@ -152,32 +213,42 @@ public class CMDChunkLoader {
         switch (argumentos.get(2).toLowerCase()) {
             case "normal":
                 int free_chunks = 0;
+                int total_free_chunks = playerData.getOnlineOnlyChunksAmount();
                 sender.sendMessage("§a§m-----------------------------------------------------");
                 for (CChunkLoader chunkLoader : chunkLoaderList) {
                     if (!chunkLoader.isAlwaysOn()){
                         free_chunks += chunkLoader.size();
                         FancyText.sendTo(sender,
                                 new FancyText("§7  - §e[" + chunkLoader.sizeX() + "] " + chunkLoader.getLoc().toString())
-                                        .setRunCommandActionText("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
+                                        .setRunCommandAction("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
                         );
                     }
                 }
-                sender.sendMessage("\n§2 ▶ §2ChunkLoaders em USO §e(Normal): §6" + free_chunks + "§7§l/§a" + playerData.getOnlineOnlyChunksAmount());
+                sender.sendMessage("");
+                CHUNKS_IN_USE_ONLINE_ONLY
+                        .addPlaceholder("%free_chunks%", free_chunks)
+                        .addPlaceholder("%total_free_chunks%", total_free_chunks)
+                        .send(sender);
                 sender.sendMessage("§a§m-----------------------------------------------------");
                 break;
             case "permanente":
                 int premium_chunks = 0;
+                int total_premium_chunks = playerData.getAlwaysOnChunksAmount();
                 sender.sendMessage("§a§m-----------------------------------------------------");
                 for (CChunkLoader chunkLoader : chunkLoaderList) {
                     if (chunkLoader.isAlwaysOn()){
                         premium_chunks += chunkLoader.size();
                         FancyText.sendTo(sender,
                                 new FancyText("§7  - §b[" + chunkLoader.sizeX() + "] " + chunkLoader.getLoc().toString())
-                                        .setRunCommandActionText("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
+                                        .setRunCommandAction("/tppos " + chunkLoader.getLoc().getX() + " " + chunkLoader.getLoc().getY() + " " + chunkLoader.getLoc().getZ() + " " + chunkLoader.getLoc().getWorldName())
                         );
                     }
                 }
-                sender.sendMessage("\n§2 ▶ §2ChunkLoaders em USO §b(Permanente): §6" + premium_chunks + "§7§l/§a" + playerData.getAlwaysOnChunksAmount());
+                sender.sendMessage("");
+                CHUNKS_IN_USE_ONLINE_ONLY
+                        .addPlaceholder("%premium_chunks%", premium_chunks)
+                        .addPlaceholder("%total_premium_chunks%", total_premium_chunks)
+                        .send(sender);
                 sender.sendMessage("§a§m-----------------------------------------------------");
                 break;
         }
@@ -188,6 +259,10 @@ public class CMDChunkLoader {
     @FinalCMD.SubCMD(
             subcmd = {"chunks"},
             usage = "%name% <PlayerName> <free|premium> <add|set> <amount> [-force]",
+            locales = {
+                    @FCLocale(lang = LocaleType.EN_US, text = "Edit specific player chunkloaders's values."),
+                    @FCLocale(lang = LocaleType.PT_BR, text = "Edita os chunkloaders de um jogador específico.")
+            },
             permission = PermissionNodes.COMMAND_ADMIN
     )
     public void chunks(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
@@ -284,7 +359,7 @@ public class CMDChunkLoader {
         nearChunks.forEach(cChunkLoader ->
                 FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
                         .setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-                        .setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+                        .setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
                 ));
     }
 
@@ -372,7 +447,7 @@ public class CMDChunkLoader {
         EverNifeFunctions.getActivePremiumChunks().forEach(cChunkLoader ->
                 FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
                         .setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-                        .setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ() + " " + cChunkLoader.getLoc().getWorldName())
+                        .setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ() + " " + cChunkLoader.getLoc().getWorldName())
                 ));
     }
 
@@ -405,7 +480,7 @@ public class CMDChunkLoader {
         playersChunks.forEach(cChunkLoader ->
                 FancyText.sendTo(sender, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
                         .setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-                        .setRunCommandActionText("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
+                        .setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
                 ));
         sender.sendMessage("");
 
