@@ -21,7 +21,7 @@ repositories {
         url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
     }
     maven {
-        url = "https://maven.petrus.dev/releases"
+        url = "https://maven.petrus.dev/public"
     }
 }
 
