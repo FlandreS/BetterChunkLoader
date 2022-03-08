@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.UUID;
 
-@XmlRootElement(name = "PlayersData")
+@XmlRootElement
 public class BCLPlayerData {
 	private UUID playerId;
 	private int alwaysOnChunksAmount, onlineOnlyChunksAmount;
