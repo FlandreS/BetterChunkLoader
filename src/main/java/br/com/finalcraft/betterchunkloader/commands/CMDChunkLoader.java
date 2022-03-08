@@ -10,6 +10,7 @@ import br.com.finalcraft.betterchunkloader.evernife.EverNifeFunctions;
 import br.com.finalcraft.evernifecore.argumento.MultiArgumentos;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.FinalCMD;
 import br.com.finalcraft.evernifecore.commands.finalcmd.help.HelpLine;
+import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
 import br.com.finalcraft.evernifecore.locale.FCLocale;
 import br.com.finalcraft.evernifecore.locale.LocaleMessage;
@@ -50,7 +51,7 @@ public class CMDChunkLoader {
     public void info(CommandSender sender, MultiArgumentos argumentos) {
 
         if (!(sender instanceof Player) || (!argumentos.get(1).isEmpty() && sender.hasPermission(PermissionNodes.COMMAND_ADMIN)) ) {
-            br.com.finalcraft.evernifecore.config.playerdata.PlayerData fcPlayerData = argumentos.get(1).getPlayerData();
+            PlayerData fcPlayerData = argumentos.get(1).getPlayerData();
             if (fcPlayerData == null){
                 FCMessageUtil.playerDataNotFound(sender, argumentos.getStringArg(1));
                 return;
@@ -200,7 +201,7 @@ public class CMDChunkLoader {
             return;
         }
 
-        br.com.finalcraft.evernifecore.config.playerdata.PlayerData fc_playerData = argumentos.get(1).getPlayerData();
+        PlayerData fc_playerData = argumentos.get(1).getPlayerData();
 
         if (fc_playerData == null){
             FCMessageUtil.playerDataNotFound(sender, argumentos.getStringArg(1));
@@ -272,7 +273,7 @@ public class CMDChunkLoader {
             return;
         }
 
-        br.com.finalcraft.evernifecore.config.playerdata.PlayerData fc_playerData = argumentos.get(1).getPlayerData();
+        PlayerData fc_playerData = argumentos.get(1).getPlayerData();
 
         if (fc_playerData == null){
             FCMessageUtil.playerDataNotFound(sender, argumentos.getStringArg(1));
@@ -367,7 +368,7 @@ public class CMDChunkLoader {
             subcmd = {"removertudo"}
     )
     public void removertudo(Player player, MultiArgumentos argumentos) {
-        br.com.finalcraft.evernifecore.config.playerdata.PlayerData fc_playerData = argumentos.get(1).getPlayerData();
+        PlayerData fc_playerData = argumentos.get(1).getPlayerData();
         FCBukkitUtil.makeConsoleExecuteCommand("bcl delete " + player.getName());
         player.sendMessage(ChatColor.GREEN + "Todos os seus chunkloaders foram removidos!");
     }
@@ -384,7 +385,7 @@ public class CMDChunkLoader {
             return;
         }
 
-        br.com.finalcraft.evernifecore.config.playerdata.PlayerData fc_playerData = argumentos.get(1).getPlayerData();
+        PlayerData fc_playerData = argumentos.get(1).getPlayerData();
 
         if (fc_playerData == null){
             FCMessageUtil.playerDataNotFound(sender, argumentos.getStringArg(1));
@@ -462,7 +463,7 @@ public class CMDChunkLoader {
             return;
         }
 
-        br.com.finalcraft.evernifecore.config.playerdata.PlayerData fc_playerData = argumentos.get(1).getPlayerData();
+        PlayerData fc_playerData = argumentos.get(1).getPlayerData();
 
         if (fc_playerData == null){
             FCMessageUtil.playerDataNotFound(sender, argumentos.getStringArg(1));
