@@ -47,7 +47,7 @@ public class CMDChunkLoader {
                     @FCLocale(lang = LocaleType.PT_BR, text = "Mostra suas informações")
             }
     )
-    public void info(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void info(CommandSender sender, MultiArgumentos argumentos) {
 
         if (!(sender instanceof Player) || (!argumentos.get(1).isEmpty() && sender.hasPermission(PermissionNodes.COMMAND_ADMIN)) ) {
             br.com.finalcraft.evernifecore.config.playerdata.PlayerData fcPlayerData = argumentos.get(1).getPlayerData();
@@ -114,7 +114,7 @@ public class CMDChunkLoader {
                     @FCLocale(lang = LocaleType.PT_BR, text = "Lista todas os seus ChunkLoaders")
             }
     )
-    public void list(Player player, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void list(Player player, MultiArgumentos argumentos, HelpLine helpLine) {
 
         if (argumentos.emptyArgs(1)){
             helpLine.sendTo(player);
@@ -193,7 +193,7 @@ public class CMDChunkLoader {
                     @FCLocale(lang = LocaleType.PT_BR, text = "Lista todos os ChunkLoaders de um jogador especifico.")
             }
     )
-    public void listother(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void listother(CommandSender sender, MultiArgumentos argumentos, HelpLine helpLine) {
 
         if (argumentos.emptyArgs(1,2)){
             helpLine.sendTo(sender);
@@ -265,7 +265,7 @@ public class CMDChunkLoader {
             },
             permission = PermissionNodes.COMMAND_ADMIN
     )
-    public void chunks(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void chunks(CommandSender sender, MultiArgumentos argumentos, HelpLine helpLine) {
 
         if (argumentos.emptyArgs(1,2,3,4)){
             helpLine.sendTo(sender);
@@ -334,7 +334,7 @@ public class CMDChunkLoader {
             usage = "%name% <PlayerName>",
             permission = PermissionNodes.COMMAND_ADMIN
     )
-    public void near(Player player, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void near(Player player) {
         List<CChunkLoader> allChunks = EverNifeFunctions.getActivePremiumChunks();
 
         if (allChunks.isEmpty()){
@@ -366,7 +366,7 @@ public class CMDChunkLoader {
     @FinalCMD.SubCMD(
             subcmd = {"removertudo"}
     )
-    public void removertudo(Player player, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void removertudo(Player player, MultiArgumentos argumentos) {
         br.com.finalcraft.evernifecore.config.playerdata.PlayerData fc_playerData = argumentos.get(1).getPlayerData();
         FCBukkitUtil.makeConsoleExecuteCommand("bcl delete " + player.getName());
         player.sendMessage(ChatColor.GREEN + "Todos os seus chunkloaders foram removidos!");
@@ -399,7 +399,7 @@ public class CMDChunkLoader {
             subcmd = {"purge"},
             permission = PermissionNodes.COMMAND_PURGE
     )
-    public void purge(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void purge(CommandSender sender) {
         IDataStore ds = DataStoreManager.getDataStore();
         List<CChunkLoader> chunkLoaders = new ArrayList(DataStoreManager.getDataStore().getChunkLoaders());
         for (CChunkLoader cl : chunkLoaders) {
@@ -456,7 +456,7 @@ public class CMDChunkLoader {
             usage = "%name% <Player>",
             permission = PermissionNodes.COMMAND_ADMIN
     )
-    public void disableFromPlayer(CommandSender sender, String label, MultiArgumentos argumentos, HelpLine helpLine) {
+    public void disableFromPlayer(CommandSender sender, MultiArgumentos argumentos, HelpLine helpLine) {
         if (argumentos.emptyArgs(1)){
             helpLine.sendTo(sender);
             return;
