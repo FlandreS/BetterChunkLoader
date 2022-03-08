@@ -3,7 +3,7 @@ package br.com.finalcraft.betterchunkloader;
 import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import br.com.finalcraft.betterchunkloader.datastore.IDataStore;
-import br.com.finalcraft.betterchunkloader.datastore.PlayerData;
+import br.com.finalcraft.betterchunkloader.datastore.BCLPlayerData;
 import br.com.finalcraft.betterchunkloader.evernife.EverNifeFunctions;
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
 import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
@@ -299,7 +299,7 @@ public class CommandExec implements CommandExecutor {
 			}
 			
 			if (args[1].equalsIgnoreCase("add")) {
-				PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
+				BCLPlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
 				if (args[3].equalsIgnoreCase("alwayson")) {
 					if (playerData.getAlwaysOnChunksAmount()+amount> BCLSettings.maxChunksAmountAlwaysOn) {
 						sender.sendMessage("Couldn't add " + amount + " always-on chunks to "+player.getName()+" because it would exceed the always-on chunks limit of "+BCLSettings.maxChunksAmountAlwaysOn);
@@ -544,7 +544,7 @@ public class CommandExec implements CommandExecutor {
 		IDataStore dataStore = DataStoreManager.getDataStore();
 		int freeAlwaysOn = dataStore.getAlwaysOnFreeChunksAmount(player.getUniqueId());
 		int freeOnlineOnly = dataStore.getOnlineOnlyFreeChunksAmount(player.getUniqueId());
-		PlayerData pd=dataStore.getPlayerData(player.getUniqueId());
+		BCLPlayerData pd=dataStore.getPlayerData(player.getUniqueId());
 		int amountAlwaysOn = pd.getAlwaysOnChunksAmount();
 		int amountOnlineOnly = pd.getOnlineOnlyChunksAmount();
 		

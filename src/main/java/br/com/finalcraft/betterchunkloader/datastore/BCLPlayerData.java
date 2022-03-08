@@ -6,20 +6,20 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.UUID;
 
-@XmlRootElement
-public class PlayerData {
+@XmlRootElement(name = "PlayersData")
+public class BCLPlayerData {
 	private UUID playerId;
 	private int alwaysOnChunksAmount, onlineOnlyChunksAmount;
 	
-	PlayerData(){}
+	BCLPlayerData(){}
 	
-	public PlayerData(UUID playerId) {
+	public BCLPlayerData(UUID playerId) {
 		this.playerId = playerId;
 		this.alwaysOnChunksAmount= BCLSettings.defaultChunksAmountAlwaysOn;
 		this.onlineOnlyChunksAmount=BCLSettings.defaultChunksAmountOnlineOnly;
 	}
 
-	public PlayerData(UUID playerId, int alwaysOnChunksAmount, int onlineOnlyChunksAmount) {
+	public BCLPlayerData(UUID playerId, int alwaysOnChunksAmount, int onlineOnlyChunksAmount) {
 		this.playerId = playerId;
 		this.alwaysOnChunksAmount = alwaysOnChunksAmount;
 		this.onlineOnlyChunksAmount = onlineOnlyChunksAmount;

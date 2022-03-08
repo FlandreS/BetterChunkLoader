@@ -82,7 +82,7 @@ public class XmlDataStore extends AHashMapDataStore {
 				try {
 					XmlPlayersData data = (XmlPlayersData) jaxbUnmarshaller.unmarshal(file);
 					if (data.playersData!=null) {
-						for (PlayerData pd : data.playersData) {
+						for (BCLPlayerData pd : data.playersData) {
 							this.playersData.put(pd.getPlayerId(), pd);
 						}
 					}
@@ -103,7 +103,7 @@ public class XmlDataStore extends AHashMapDataStore {
 			jaxbPlayersDataMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			
 			XmlPlayersData xpd = new XmlPlayersData();
-			xpd.playersData=new ArrayList<PlayerData>(this.playersData.values());
+			xpd.playersData=new ArrayList<BCLPlayerData>(this.playersData.values());
 			jaxbPlayersDataMarshaller.marshal(xpd, getPlayersDataFile());
 		} catch (JAXBException e) {
 			throw new RuntimeException(e);
@@ -173,7 +173,7 @@ public class XmlDataStore extends AHashMapDataStore {
 	@XmlAccessorType(value=XmlAccessType.FIELD)
 	private static class XmlPlayersData {
 		@XmlElement(name="pd")
-		private List<PlayerData> playersData;
+		private List<BCLPlayerData> playersData;
 	}
 
 

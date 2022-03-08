@@ -13,7 +13,7 @@ import java.util.*;
  * Classes that extend this class should store the data somewhere. */
 public abstract class AHashMapDataStore implements IDataStore {
 	protected Map<String, List<CChunkLoader>> chunkLoaders;
-	protected Map<UUID, PlayerData> playersData;
+	protected Map<UUID, BCLPlayerData> playersData;
 	
 	@Override
 	public List<CChunkLoader> getChunkLoaders() {
@@ -139,40 +139,40 @@ public abstract class AHashMapDataStore implements IDataStore {
 
 	@Override
 	public void setAlwaysOnChunksLimit(UUID playerId, int amount) {
-		PlayerData playerData = this.getPlayerData(playerId);
+		BCLPlayerData playerData = this.getPlayerData(playerId);
 		playerData.setAlwaysOnChunksAmount(amount);
 	}
 
 	@Override
 	public void setOnlineOnlyChunksLimit(UUID playerId, int amount) {
-		PlayerData playerData = this.getPlayerData(playerId);
+		BCLPlayerData playerData = this.getPlayerData(playerId);
 		playerData.setOnlineOnlyChunksAmount(amount);
 	}
 
 	@Override
 	public void addAlwaysOnChunksLimit(UUID playerId, int amount) {
-		PlayerData playerData = this.getPlayerData(playerId);
+		BCLPlayerData playerData = this.getPlayerData(playerId);
 		playerData.setAlwaysOnChunksAmount(Math.min(playerData.getAlwaysOnChunksAmount()+amount, BCLSettings.maxChunksAmountAlwaysOn));
 	}
 
 	@Override
 	public void addOnlineOnlyChunksLimit(UUID playerId, int amount) {
-		PlayerData playerData = this.getPlayerData(playerId);
+		BCLPlayerData playerData = this.getPlayerData(playerId);
 		playerData.setOnlineOnlyChunksAmount(Math.min(playerData.getOnlineOnlyChunksAmount()+amount, BCLSettings.maxChunksAmountOnlineOnly));
 	}
 	
 	@Override
-	public PlayerData getPlayerData(UUID playerId) {
-		PlayerData playerData = this.playersData.get(playerId);
+	public BCLPlayerData getPlayerData(UUID playerId) {
+		BCLPlayerData playerData = this.playersData.get(playerId);
 		if (playerData==null) {
-			playerData = new PlayerData(playerId);
+			playerData = new BCLPlayerData(playerId);
 			this.playersData.put(playerId, playerData);
 		}
 		return playerData;
 	}
 	
 	@Override
-	public List<PlayerData> getPlayersData() {
-		return new ArrayList<PlayerData>(this.playersData.values());
+	public List<BCLPlayerData> getPlayersData() {
+		return new ArrayList<BCLPlayerData>(this.playersData.values());
 	}
 }

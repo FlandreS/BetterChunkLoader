@@ -65,8 +65,8 @@ public interface IDataStore {
 	public abstract void addOnlineOnlyChunksLimit(UUID playerId, int amount);
 	
 	/** Get the player data */
-	public abstract PlayerData getPlayerData(UUID playerId);
+	public abstract BCLPlayerData getPlayerData(UUID playerId);
 	
 	/** Get players data*/
-	public abstract List<PlayerData> getPlayersData();
+	public abstract List<BCLPlayerData> getPlayersData();
 }

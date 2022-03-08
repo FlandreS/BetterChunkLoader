@@ -5,7 +5,7 @@ import br.com.finalcraft.betterchunkloader.CChunkLoader;
 import br.com.finalcraft.betterchunkloader.PermissionNodes;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import br.com.finalcraft.betterchunkloader.datastore.IDataStore;
-import br.com.finalcraft.betterchunkloader.datastore.PlayerData;
+import br.com.finalcraft.betterchunkloader.datastore.BCLPlayerData;
 import br.com.finalcraft.betterchunkloader.evernife.EverNifeFunctions;
 import br.com.finalcraft.evernifecore.argumento.MultiArgumentos;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.FinalCMD;
@@ -55,7 +55,7 @@ public class CMDChunkLoader {
                 FCMessageUtil.playerDataNotFound(sender, argumentos.getStringArg(1));
                 return;
             }
-            PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(fcPlayerData.getUniqueId());
+            BCLPlayerData playerData = DataStoreManager.getDataStore().getPlayerData(fcPlayerData.getUniqueId());
 
             int free_chunks = DataStoreManager.getDataStore().getOnlineOnlyFreeChunksAmount(fcPlayerData.getUniqueId());
             int total_free_chunks = playerData.getOnlineOnlyChunksAmount();
@@ -77,7 +77,7 @@ public class CMDChunkLoader {
         }
 
         Player player = (Player) sender;
-        PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
+        BCLPlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
 
         int free_chunks = DataStoreManager.getDataStore().getOnlineOnlyFreeChunksAmount(player.getUniqueId());
         int total_free_chunks = playerData.getOnlineOnlyChunksAmount();
@@ -121,7 +121,7 @@ public class CMDChunkLoader {
             return;
         }
 
-        PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
+        BCLPlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
         List<CChunkLoader> chunkLoaderList = DataStoreManager.getDataStore().getChunkLoaders(player.getUniqueId());
 
         switch (argumentos.get(1).toLowerCase()) {
@@ -207,7 +207,7 @@ public class CMDChunkLoader {
             return;
         }
 
-        PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(fc_playerData.getUniqueId());
+        BCLPlayerData playerData = DataStoreManager.getDataStore().getPlayerData(fc_playerData.getUniqueId());
         List<CChunkLoader> chunkLoaderList = DataStoreManager.getDataStore().getChunkLoaders(fc_playerData.getUniqueId());
 
         switch (argumentos.get(2).toLowerCase()) {

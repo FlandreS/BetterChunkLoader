@@ -72,11 +72,11 @@ public class MySqlDataStore extends AHashMapDataStore {
 			throw new RuntimeException(e);
 		}
 		
-		this.playersData = new HashMap<UUID, PlayerData>();
+		this.playersData = new HashMap<UUID, BCLPlayerData>();
 		try {
 			ResultSet rs = this.statement().executeQuery("SELECT * FROM bcl_playersdata");
 			while(rs.next()) {
-				PlayerData pd = new PlayerData(toUUID(rs.getBytes(1)), rs.getInt(2), rs.getInt(3));
+				BCLPlayerData pd = new BCLPlayerData(toUUID(rs.getBytes(1)), rs.getInt(2), rs.getInt(3));
 				this.playersData.put(pd.getPlayerId(), pd);
 			}
 		} catch (SQLException e) {

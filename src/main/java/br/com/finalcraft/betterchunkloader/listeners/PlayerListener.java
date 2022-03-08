@@ -4,7 +4,7 @@ import br.com.finalcraft.betterchunkloader.BetterChunkLoader;
 import br.com.finalcraft.betterchunkloader.config.data.ChunksByRank;
 import br.com.finalcraft.betterchunkloader.config.data.RankLimiter;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
-import br.com.finalcraft.betterchunkloader.datastore.PlayerData;
+import br.com.finalcraft.betterchunkloader.datastore.BCLPlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +30,7 @@ public class PlayerListener implements Listener {
 					RankLimiter rankLimiter = ChunksByRank.getPlayerLimit(player);
 
 					if (rankLimiter != null){
-						PlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
+						BCLPlayerData playerData = DataStoreManager.getDataStore().getPlayerData(player.getUniqueId());
 
 						int currentOnlineOnly = playerData.getOnlineOnlyChunksAmount();
 						int currentAlwaysOn = playerData.getAlwaysOnChunksAmount();
