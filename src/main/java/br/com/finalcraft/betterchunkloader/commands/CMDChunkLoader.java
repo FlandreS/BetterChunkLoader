@@ -104,7 +104,7 @@ public class CMDChunkLoader {
     public static LocaleMessage CHUNKS_IN_USE_ONLINE_ONLY;
 
     @FCLocale(lang = LocaleType.EN_US, text = "§2 ▶ §2ChunkLoaders being used §b(Permanente): §6§6%free_chunks%§7§l/§a%total_premium_chunks%")
-    @FCLocale(lang = LocaleType.PT_BR, text = "§2 ▶ §2ChunkLoaders em USO §b(Permanente): §6%free_chunks%§7§l/§a%total_premium_chunks%")
+    @FCLocale(lang = LocaleType.PT_BR, text = "§2 ▶ §2ChunkLoaders em USO §b(Permanente): §6%premium_chunks%§7§l/§a%total_premium_chunks%")
     public static LocaleMessage CHUNKS_IN_USE_ALWAYS_ON;
 
     @FinalCMD.SubCMD(
@@ -127,8 +127,8 @@ public class CMDChunkLoader {
 
         switch (argumentos.get(1).toLowerCase()) {
             case "free":
-            case "normal":
             case "comum":
+            case "normal":
             case "onlineonly":
                 int free_chunks = 0;
                 int total_free_chunks = playerData.getOnlineOnlyChunksAmount();
@@ -154,9 +154,10 @@ public class CMDChunkLoader {
                 player.sendMessage("§a§m-----------------------------------------------------");
                 break;
             case "vip":
+            case "perma":
             case "premium":
-            case "permanente":
             case "alwayson":
+            case "permanente":
                 int premium_chunks = 0;
                 int total_premium_chunks = playerData.getAlwaysOnChunksAmount();
                 player.sendMessage("§a§m-----------------------------------------------------");
