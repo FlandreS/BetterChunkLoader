@@ -1,5 +1,5 @@
 group 'br.com.finalcraft'
-version '3.1.3'
+version '3.1.4'
 
 apply plugin: 'java'
 
@@ -31,7 +31,6 @@ dependencies {
     compile name: "BCLForgeLib-1.0"
     compile name: "spigot-1.7.10-SNAPSHOT-b1643"
     compile name: "Vault-1.4.1"
-    compile name: "PlaceholderAPI"
 
     // compile name: "Thermos"
     // compile 'org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT'

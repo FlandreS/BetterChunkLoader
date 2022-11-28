@@ -1,59 +1,32 @@
 package br.com.finalcraft.betterchunkloader;
 
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
-import me.clip.placeholderapi.external.EZPlaceholderHook;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
+import br.com.finalcraft.evernifecore.integration.placeholders.PAPIIntegration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
-public class PlaceHolderIntegration extends EZPlaceholderHook {
+public class PlaceHolderIntegration {
 
-    public static void initialize(){
-        new PlaceHolderIntegration(BetterChunkLoader.instance(),"bcl").hook();
+    public static void initialize(JavaPlugin plugin){
+        PAPIIntegration.createPlaceholderIntegration(plugin, "bcl", PlayerData.class)
+                .addParser("chunks_total", playerData -> totalChunks())
+                .addParser("chunks_active", playerData -> activeChunks(null))
+                .addParser("chunks_commmon_active", playerData -> activeChunks(true))
+                .addParser("chunks_premium_active", playerData -> activeChunks(false))
+
+                .addParser("common_chunks", playerData -> getCommonChunks(playerData))
+                .addParser("premium_chunks", playerData -> getPremiumChunks(playerData));
     }
-
-    public PlaceHolderIntegration(Plugin plugin, String identifier) {
-        super(plugin, identifier);
-    }
-
-    @Override
-    public String onPlaceholderRequest(Player player, String placeholder) {
-
-        switch (placeholder){
-            case "chunks_total":
-                return totalChunks();
-            case "chunks_active":
-                return activeChunks(null);
-            case "chunks_commmon_active":
-                return activeChunks(true);
-            case "chunks_premium_active":
-                return activeChunks(false);
-        }
-
-        if (player == null){
-            return "";
-        }
-
-        switch (placeholder){
-            case "common_chunks":
-                return getCommonChunks(player);
-            case "premium_chunks":
-                return getPremiumChunks(player);
-        }
-
-        return null;
-    }
-
 
     private static String totalChunks(){
         return "" + DataStoreManager.getDataStore().getChunkLoaders().size();
     }
 
-    private static String getCommonChunks(Player player){
-
+    private static String getCommonChunks(PlayerData playerData){
         int commonChunks = 0;
-        List<CChunkLoader> clList = DataStoreManager.getDataStore().getChunkLoaders(player.getUniqueId());
+        List<CChunkLoader> clList = DataStoreManager.getDataStore().getChunkLoaders(playerData.getUniqueId());
         if (clList != null) {
             for (CChunkLoader aChunk : clList) {
                 if (!aChunk.isAlwaysOn()) {
@@ -64,10 +37,9 @@ public class PlaceHolderIntegration extends EZPlaceholderHook {
         return "" + commonChunks;
     }
 
-    private static String getPremiumChunks(Player player){
-
+    private static String getPremiumChunks(PlayerData playerData){
         int premiumChunks = 0;
-        List<CChunkLoader> clList = DataStoreManager.getDataStore().getChunkLoaders(player.getUniqueId());
+        List<CChunkLoader> clList = DataStoreManager.getDataStore().getChunkLoaders(playerData.getUniqueId());
         if (clList != null){
             for (CChunkLoader aChunk : clList){
                 if (aChunk.isAlwaysOn()){

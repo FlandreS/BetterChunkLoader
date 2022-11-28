@@ -49,7 +49,9 @@ public class BetterChunkLoader extends JavaPlugin {
 		instance=this;
 		
 		this.enable();
-		PlaceHolderIntegration.initialize();
+		if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+			PlaceHolderIntegration.initialize(this);
+		}
 	}
 	
 	public void enable() {
