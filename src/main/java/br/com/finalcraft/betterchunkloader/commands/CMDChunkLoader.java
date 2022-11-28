@@ -334,10 +334,11 @@ public class CMDChunkLoader {
 
         player.sendMessage("--------- Near Premium Chunks ---------");
         nearChunks.forEach(cChunkLoader ->
-                FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
+                FancyText.of("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
                         .setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
                         .setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-                ));
+                        .send(player)
+                );
     }
 
     @FinalCMD.SubCMD(
@@ -410,10 +411,11 @@ public class CMDChunkLoader {
     public void listpremium(Player player, String label, MultiArgumentos argumentos, HelpLine helpLine) {
         player.sendMessage("--------- Premium Chunks ---------");
         EverNifeFunctions.getActivePremiumChunks().forEach(cChunkLoader ->
-                FancyText.sendTo(player, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
+                FancyText.of("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
                         .setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
                         .setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ() + " " + cChunkLoader.getLoc().getWorldName())
-                ));
+                        .send(player)
+                );
     }
 
     @FinalCMD.SubCMD(
@@ -443,10 +445,11 @@ public class CMDChunkLoader {
 
         sender.sendMessage("--------- Removed Chunks ---------");
         playersChunks.forEach(cChunkLoader ->
-                FancyText.sendTo(sender, new FancyText("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
+                FancyText.of("§a§lPremium Chunk [§6§l " + (cChunkLoader.markDisabled ? "§c§l" : "") + cChunkLoader.getOwnerName() + " §a§l]")
                         .setHoverText("Coords " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
                         .setRunCommandAction("/tppos " + cChunkLoader.getLoc().getX() + " " + cChunkLoader.getLoc().getY() + " " + cChunkLoader.getLoc().getZ())
-                ));
+                        .send(sender)
+                );
         sender.sendMessage("");
 
         for (CChunkLoader chunkLoader : playersChunks){
@@ -464,6 +467,6 @@ public class CMDChunkLoader {
         // Shame :/
         Bukkit.getPluginManager().disablePlugin(BetterChunkLoader.instance());
         Bukkit.getPluginManager().enablePlugin(BetterChunkLoader.instance());
-        sender.sendMessage(ChatColor.RED + "BetterChunkLoader reloaded.");
+        FCMessageUtil.pluginHasBeenReloaded(sender, "BetterChunkLoader");
     }
 }
