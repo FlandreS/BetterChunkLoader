@@ -1,14 +1,17 @@
 Settings:
   enableRankLimit: false
 
-#The order here matter!
-#The permission is checked from latest one to the first one!
-#So, if a player has two permission (in this case, is inside two different groups)
-#the latest LIMITER has priority over the first one
+# -----------------------------------------------------------------------------------------------
 #
+# The order here matters!
+#
+# The permission is checked from the latest one to the first one!
+# So, if a player has two permission (in this case, is inside two different groups)
+# the latest LIMITER has priority over the first one
 #
 # ChunkLimiter will always respect the "config.yml" limit
 #
+# -----------------------------------------------------------------------------------------------
 ChunkLimiter:
   Visitante:
     onlineOnly: 9

@@ -2,13 +2,22 @@ package br.com.finalcraft.betterchunkloader;
 
 import br.com.finalcraft.betterchunkloader.config.data.BCLSettings;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
+import br.com.finalcraft.evernifecore.listeners.base.ECListener;
+import br.com.finalcraft.evernifecore.locale.FCLocale;
+import br.com.finalcraft.evernifecore.locale.LocaleMessage;
+import br.com.finalcraft.evernifecore.locale.LocaleType;
+import br.com.finalcraft.evernifecore.minecraft.vector.BlockPos;
+import br.com.finalcraft.evernifecore.minecraft.vector.ChunkPos;
+import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
+import br.com.finalcraft.evernifecore.util.FCMessageUtil;
+import br.com.finalcraft.evernifecore.util.commons.TriState;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,77 +32,96 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class EventListener implements Listener {
-	private BetterChunkLoader instance;
-	
-	EventListener(BetterChunkLoader instance) {
-		this.instance = instance;
-	}
-	
+public class EventListener implements ECListener {
+
+	@FCLocale(lang = LocaleType.PT_BR, text = "§4§l ▶ §cVocê não pode editar o ChunkLoader de outros jogadores!")
+	@FCLocale(lang = LocaleType.EN_US, text = "§4§l ▶ §cYou cannot edit other's ChunkLoaders!")
+	private static LocaleMessage CANNOT_EDIT_OTHERS_CHUNKLOADERS;
+
 	@EventHandler(ignoreCancelled=true, priority = EventPriority.MONITOR)
 	void onPlayerInteract(PlayerInteractEvent event) {
-		Action action = event.getAction();
+
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
 	    Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
 		
-		if (clickedBlock==null || player==null) {
+		if (clickedBlock == null || player == null) {
 			return;
 		}
-		
-		if (clickedBlock.getType()== BCLSettings.alwaysOnMaterial  || clickedBlock.getType()==BCLSettings.onlineOnlyMaterial) {
-            //player.sendMessage("Checker Valid Material");
-            if (action==Action.RIGHT_CLICK_BLOCK) {
-				//player.sendMessage("Checker 1");
-				CChunkLoader chunkLoader = DataStoreManager.getDataStore().getChunkLoaderAt(new BlockLocation(clickedBlock.getLocation()));
-				if (player.getItemInHand().getType()==Material.BLAZE_ROD) {
-					//player.sendMessage("Checker 2");
-					if (chunkLoader!=null) {
-						if (player.getUniqueId().equals(chunkLoader.getOwner()) || player.hasPermission("betterchunkloader.edit") || (chunkLoader.isAdminChunkLoader() && player.hasPermission("betterchunkloader.adminloader"))) {
-							chunkLoader.showUI(player);
-						} else {
-							player.sendMessage(Messages.get("CantEditOthersChunkLoaders"));
-						}
-					} else {
-						if (canBreak(clickedBlock, player)) {
-							//player.sendMessage("Checker 3");
-							UUID uid=player.getUniqueId();
-							if (clickedBlock.getType()==BCLSettings.alwaysOnMaterial) {
-								if (!player.hasPermission("betterchunkloader.alwayson")) {
-									player.sendMessage(Messages.get("NoPermissionToCreateAlwaysOnChunkLoaders") +(player.isOp()?" (betterchunkloader.alwayson is needed)":""));
-									return;
-								}
-								if (player.isSneaking() && player.hasPermission("betterchunkloader.adminloader")) {
-									uid=CChunkLoader.adminUUID;
-								}
-							} else if (clickedBlock.getType()==BCLSettings.onlineOnlyMaterial) {
-								if (!player.hasPermission("betterchunkloader.onlineonly")) {
-									player.sendMessage(Messages.get("NoPermissionToCreateOnlineOnlyChunkLoaders")+(player.isOp()?" (betterchunkloader.onlineonly is needed)":""));
-									return;
-								}
-							} else {
-								return;
-							}
 
-							chunkLoader = new CChunkLoader((int) (Math.floor(clickedBlock.getX()/16.00)), (int) (Math.floor(clickedBlock.getZ()/16.00)), clickedBlock.getWorld().getName(), (byte) -1, uid,player.getName(), new BlockLocation(clickedBlock), null, (clickedBlock.getType() == BCLSettings.alwaysOnMaterial));
-							chunkLoader.showUI(player);
-						} else {
-							player.sendMessage(Messages.get("NoBuildPermission"));
-						}
-					}
+		Material blockType = clickedBlock.getType();
+
+		if (blockType != BCLSettings.alwaysOnMaterial  && blockType != BCLSettings.onlineOnlyMaterial) {
+			return;
+		}
+
+		CChunkLoader chunkLoader = DataStoreManager.getDataStore().getChunkLoaderAt(new BlockLocation(clickedBlock.getLocation()));
+
+		if (player.getItemInHand().getType() == Material.BLAZE_ROD) {
+
+			if (chunkLoader != null) {
+				if (player.getUniqueId().equals(chunkLoader.getOwner())
+						|| player.hasPermission(PermissionNodes.ADMIN_EDIT_ALL)
+						|| (chunkLoader.isAdminChunkLoader() && player.hasPermission(PermissionNodes.ADMIN_LOADER))) {
+					chunkLoader.showUI(player);
 				} else {
-					if (chunkLoader!=null) {
-						player.sendMessage(chunkLoader.info());
-						if (player.isSneaking()) {
-							chunkLoader.showCorners(player);
-						}
-					} else {
-						if (player.getItemInHand().getType()!=BCLSettings.alwaysOnMaterial && player.getItemInHand().getType()!=BCLSettings.onlineOnlyMaterial) {
-							player.sendMessage(Messages.get("CanCreateChunkLoaders"));
-						}
-					}
+					CANNOT_EDIT_OTHERS_CHUNKLOADERS.send(player);
+				}
+				return;
+			}
+
+			if (!canBreak(clickedBlock, player)){
+				FCMessageUtil.needsThePermission(player);
+				return;
+			}
+
+			UUID uuid = player.getUniqueId();
+
+			TriState isAlwaysOn = blockType == BCLSettings.alwaysOnMaterial ? TriState.TRUE
+					: blockType == BCLSettings.onlineOnlyMaterial ? TriState.FALSE
+					: TriState.UNKNOWN;
+
+			if (isAlwaysOn.isUnknown()){
+				//Is not a ChunkLoader Material!
+				return;
+			}
+
+			if (isAlwaysOn.toBoolean()) {
+				if (!player.hasPermission(PermissionNodes.CHUNK_ALWAYSON)) {
+					FCMessageUtil.needsThePermission(player, PermissionNodes.CHUNK_ALWAYSON);
+					return;
+				}
+				if (player.isSneaking() && player.hasPermission(PermissionNodes.ADMIN_LOADER)) {
+					uuid = CChunkLoader.adminUUID;
+				}
+			} else {
+				if (!player.hasPermission(PermissionNodes.CHUNK_ONLINEONLY)) {
+					FCMessageUtil.needsThePermission(player, PermissionNodes.CHUNK_ONLINEONLY);
+					return;
+				}
+			}
+
+			ChunkPos chunkPos = BlockPos.from(clickedBlock.getLocation()).getChunkPos();
+
+			chunkLoader = new CChunkLoader(chunkPos.getX(), chunkPos.getZ(), clickedBlock.getWorld().getName(), (byte) -1, uuid,player.getName(), new BlockLocation(clickedBlock), null, (clickedBlock.getType() == BCLSettings.alwaysOnMaterial));
+			chunkLoader.showUI(player);
+
+		} else {
+			if (chunkLoader!=null) {
+				player.sendMessage(chunkLoader.info());
+				if (player.isSneaking()) {
+					chunkLoader.showCorners(player);
+				}
+			} else {
+				if (player.getItemInHand().getType()!=BCLSettings.alwaysOnMaterial && player.getItemInHand().getType()!=BCLSettings.onlineOnlyMaterial) {
+					player.sendMessage(Messages.get("CanCreateChunkLoaders"));
 				}
 			}
 		}
+
 		//player.sendMessage("Checker Nothing Happened");
 	}
 
@@ -160,10 +188,9 @@ public class EventListener implements Listener {
     		}
     		
     		if (chunkLoader.isAdminChunkLoader()) {
-    			if (!player.hasPermission("betterchunkloader.adminloader")) {
-	    			player.sendMessage(Messages.get("PermissionDenied"));
-	    			return;
-    			}
+				if (!FCBukkitUtil.hasThePermission(player, PermissionNodes.ADMIN_LOADER)) {
+					return;
+				}
     		} else {
 	    		if (!player.getUniqueId().equals(chunkLoader.getOwner()) && !player.hasPermission("betterchunkloader.edit")) {
 	    			player.sendMessage(Messages.get("CantEditOthersChunkLoaders"));
@@ -253,8 +280,8 @@ public class EventListener implements Listener {
     }
 	
 	static boolean canBreak(Block block, Player player) {
-		BlockBreakEvent bbe = new BlockBreakEvent(block, player);
-		BetterChunkLoader.instance().getServer().getPluginManager().callEvent(bbe);
-		return !bbe.isCancelled();
+		BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
+		Bukkit.getServer().getPluginManager().callEvent(breakEvent);
+		return !breakEvent.isCancelled();
 	}
 }

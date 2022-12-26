@@ -377,34 +377,6 @@ public class CMDChunkLoader {
     }
 
     @FinalCMD.SubCMD(
-            subcmd = {"enable"},
-            permission = PermissionNodes.COMMAND_ADMIN
-    )
-    private void enable(CommandSender sender) {
-        if (BetterChunkLoader.instance().enabled) {
-            sender.sendMessage(ChatColor.RED + "BetterChunkLoader is already enabled!");
-            return;
-        }
-
-        BetterChunkLoader.instance().enable();
-        sender.sendMessage(ChatColor.GREEN + "BetterChunkLoader has been enabled!");
-    }
-
-    @FinalCMD.SubCMD(
-            subcmd = {"disable"},
-            permission = PermissionNodes.COMMAND_ADMIN
-    )
-    private void disable(CommandSender sender) {
-        if (!BetterChunkLoader.instance().enabled) {
-            sender.sendMessage(ChatColor.RED + "BetterChunkLoader is already disabled!");
-            return;
-        }
-
-        BetterChunkLoader.instance().disable();
-        sender.sendMessage(ChatColor.GREEN + "BetterChunkLoader has been disabled!");
-    }
-
-    @FinalCMD.SubCMD(
             subcmd = {"listpremium"},
             permission = PermissionNodes.COMMAND_ADMIN
     )

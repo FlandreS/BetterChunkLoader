@@ -10,133 +10,104 @@ import br.com.finalcraft.betterchunkloader.listeners.PlayerListener;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerController;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.config.uuids.UUIDsController;
+import br.com.finalcraft.evernifecore.ecplugin.annotations.ECPlugin;
+import br.com.finalcraft.evernifecore.listeners.base.ECListener;
+import br.com.finalcraft.evernifecore.logger.ECLogger;
+import br.com.finalcraft.evernifecore.util.FCBukkitUtil;
 import net.kaikk.mc.bcl.forgelib.BCLForgeLib;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
+@ECPlugin(
+		bstatsID = "17189"
+)
 public class BetterChunkLoader extends JavaPlugin {
 	private static BetterChunkLoader instance;
-	private static Permission permissions;
-	public boolean enabled;
-	
-	public void onLoad() {
-		// Register XML DataStore
-		DataStoreManager.registerDataStore("XML", XmlDataStore.class);
-		
-		// Register MySQL DataStore
-		DataStoreManager.registerDataStore("MySQL", MySqlDataStore.class);
+	private static ECLogger ecLogger;
+
+	public static ECLogger getLog() {
+		return ecLogger;
 	}
-	
+
+	@Override
 	public void onEnable() {
-		// check if forge is running
-		try {
-			Class.forName("net.minecraftforge.common.ForgeVersion");
-		} catch (ClassNotFoundException e) {
+		instance = this;
+		ecLogger = new ECLogger(this);
+
+		if (!FCBukkitUtil.isModLoaded("BCLForgeLib")){
 			throw new RuntimeException("Cauldron/KCauldron and BCLForgeLib are needed to run this plugin!");
 		}
-		
-		// check if BCLForgeLib is present
-		try {
-			Class.forName("net.kaikk.mc.bcl.forgelib.BCLForgeLib");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("BCLForgeLib is needed to run this plugin!");
-		}
-		
-		instance=this;
-		
-		this.enable();
+
+		// Register XML DataStore
+		DataStoreManager.registerDataStore("XML", XmlDataStore.class);
+
+		// Register MySQL DataStore
+		DataStoreManager.registerDataStore("MySQL", MySqlDataStore.class);
+
+		this.onReload();
+
+		getLog().info("Registering Listeners...");
+		ECListener.register(this, EventListener.class);
+		ECListener.register(this, PlayerListener.class);
+
+		getLog().info("Registering Commands...");
+		CommandRegisterer.registerCommands(this);
+
 		if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
 			PlaceHolderIntegration.initialize(this);
 		}
 	}
-	
-	public void enable() {
-		// load vault permissions
-		if (!this.enabled) {
-			permissions = Bukkit.getServicesManager().getRegistration(Permission.class).getProvider();
-			
-			try {
-				// load config
-				this.getLogger().info("Loading config...");
-				ConfigManager.initialize(this);
 
-				// load messages localization
-				Messages.load(this, "messages.yml");
-				
-				// instantiate data store, if needed
-				if (DataStoreManager.getDataStore()==null || !DataStoreManager.getDataStore().getName().equals(BCLSettings.dataStore)) {
-					DataStoreManager.setDataStoreInstance(BCLSettings.dataStore);
-				}
-				
-				// load datastore
-				this.getLogger().info("Loading "+DataStoreManager.getDataStore().getName()+" Data Store...");
-				DataStoreManager.getDataStore().load();
-				
-				this.getLogger().info("Loaded "+DataStoreManager.getDataStore().getChunkLoaders().size()+" chunk loaders data.");
-				this.getLogger().info("Loaded "+DataStoreManager.getDataStore().getPlayersData().size()+" players data.");
-				
-				// load always on chunk loaders
-				int count=0;
-				for (CChunkLoader cl : DataStoreManager.getDataStore().getChunkLoaders()) {
-					if (cl.isLoadable()) {
-						BCLForgeLib.instance().addChunkLoader(cl);
-						count++;
-					}
-				}
-				
-				this.getLogger().info("Loaded "+count+" always-on chunk loaders.");
-				
-				this.getLogger().info("Loading Listeners...");
-				this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
-				if (Bukkit.getPluginManager().isPluginEnabled("BetterRankUp")){
-					this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-				}
+	@ECPlugin.Reload
+	public void onReload(){
+		onDisable();//First thing, remove all existing enabled chunk loaders
 
-				CommandRegisterer.registerCommands(this);
+		getLog().info("Loading Configuration...");
+		ConfigManager.initialize(this);
 
-				this.getLogger().info("Load complete.");
-			} catch (Exception e) {
-				e.printStackTrace();
-				this.getLogger().warning("Load failed!");
-				Bukkit.getPluginManager().disablePlugin(this);
-			}
-			this.enabled = true;
+		// load part of localization
+		Messages.load(this, "messages.yml");
+
+		getLog().info("Instantiating Database...");
+		// instantiate data store, if needed
+		if (DataStoreManager.getDataStore()==null || !DataStoreManager.getDataStore().getName().equals(BCLSettings.dataStore)) {
+			DataStoreManager.setDataStoreInstance(BCLSettings.dataStore);
 		}
+
+		getLog().info("Loading [%s] DataStore...", DataStoreManager.getDataStore().getName());
+		DataStoreManager.getDataStore().load();
+
+		getLog().info("Loaded %s chunk loaders data!", DataStoreManager.getDataStore().getChunkLoaders().size());
+		getLog().info("Loaded %s players data!", DataStoreManager.getDataStore().getPlayersData().size());
+
+		long loadedChunks = DataStoreManager.getDataStore().getChunkLoaders().stream()
+				.filter(CChunkLoader::isLoadable)
+				.peek(chunkLoader -> BCLForgeLib.instance().addChunkLoader(chunkLoader))
+				.count();
+
+		getLog().info("Loaded %s always-on chunk loaders!", loadedChunks);
 	}
-	
+
+	@Override
 	public void onDisable() {
-		this.disable();
-	}
-	
-	public void disable() {
-		if (this.enabled) {
+		if (DataStoreManager.getDataStore() != null){
 			for (CChunkLoader cl : DataStoreManager.getDataStore().getChunkLoaders()) {
 				if (BCLForgeLib.instance().getChunkLoaders().containsValue(cl)){
 					BCLForgeLib.instance().removeChunkLoader(cl);
 				}
 			}
-			this.enabled = false;
 		}
 	}
 
 	public static BetterChunkLoader instance() {
 		return instance;
 	}
-	
+
 	public static long getPlayerLastPlayed(UUID playerId) {
 		PlayerData playerData = PlayerController.getPlayerData(UUIDsController.getNameFromUUID(playerId));
 		return playerData != null ? playerData.getLastSeen() : 0;
 	}
 
-	public static boolean hasPermission(OfflinePlayer player, String permission) {
-		try {
-			return permissions.playerHas(null, player, permission);
-		} catch (Exception e) {
-			return false;
-		}
-	}
 }
