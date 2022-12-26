@@ -3,6 +3,8 @@ package br.com.finalcraft.betterchunkloader.commands;
 import br.com.finalcraft.betterchunkloader.BetterChunkLoader;
 import br.com.finalcraft.betterchunkloader.CChunkLoader;
 import br.com.finalcraft.betterchunkloader.PermissionNodes;
+import br.com.finalcraft.betterchunkloader.config.data.ChunksByRank;
+import br.com.finalcraft.betterchunkloader.config.data.RankLimiter;
 import br.com.finalcraft.betterchunkloader.datastore.BCLPlayerData;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import br.com.finalcraft.betterchunkloader.datastore.IDataStore;
@@ -41,6 +43,38 @@ public class CMDChunkLoader {
     @FCLocale(lang = LocaleType.PT_BR, text = "§2    ▶ §aChunkLoaders Disponíveis §b(Permanente): §6%premium_chunks%§7§l/§a%total_premium_chunks%")
     public static LocaleMessage AVAILABLE_CHUNKS_ALWAYS_ON;
 
+
+    @FinalCMD.SubCMD(
+            subcmd = {"debuggroup"},
+            locales = {
+                    @FCLocale(lang = LocaleType.EN_US, text = "Show your group info"),
+                    @FCLocale(lang = LocaleType.PT_BR, text = "Mostra suas informações de grupo")
+            },
+            permission = PermissionNodes.COMMAND_DEBUGGROUP
+    )
+    public void debuggroup(Player player) {
+        player.sendMessage("§a§m-----------------------------------------------------");
+        player.sendMessage("§2§l ▶ §eenableRankLimit: §a" + ChunksByRank.enableRankLimit);
+        player.sendMessage("§2§l ▶ §eRankLimitGroups: §a" + ChunksByRank.RANK_LIMITERS_REVERSED_ORDER.size());
+        player.sendMessage("");
+
+        for (RankLimiter rankLimiter : ChunksByRank.RANK_LIMITERS_REVERSED_ORDER) {
+            player.sendMessage(String.format("§2§l    - §e[%s] §awith permission: §b%s", rankLimiter.getRankName(), rankLimiter.getPermission()));
+        }
+
+        player.sendMessage("");
+
+        RankLimiter rankLimiter = ChunksByRank.getPlayerLimit(player);
+
+        if (rankLimiter == null){
+            player.sendMessage("§2§l ▶ §eYour RankLimiter: §cnull");
+        }else {
+            player.sendMessage("§2§l ▶ §aYour Limit [§d" + rankLimiter.getRankName() + "§a]: OnlineOnly=§b" + rankLimiter.getOnlineOnly());
+            player.sendMessage("§2§l ▶ §aYour Limit [§d" + rankLimiter.getRankName() + "§a]: AlwaysOn=§b" + rankLimiter.getAlwaysOn());
+        }
+
+        player.sendMessage("§a§m-----------------------------------------------------");
+    }
 
     @FinalCMD.SubCMD(
             subcmd = {"info"},
@@ -99,6 +133,7 @@ public class CMDChunkLoader {
         player.sendMessage("§a§m-----------------------------------------------------");
         return;
     }
+
 
     @FCLocale(lang = LocaleType.EN_US, text = "§2 ▶ §2ChunkLoaders being used §e(Normal): §6%free_chunks%§7§l/§a%total_free_chunks%")
     @FCLocale(lang = LocaleType.PT_BR, text = "§2 ▶ §2ChunkLoaders em USO §e(Normal): §6%free_chunks%§7§l/§a%total_free_chunks%")

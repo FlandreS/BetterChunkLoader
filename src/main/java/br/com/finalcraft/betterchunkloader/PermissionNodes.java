@@ -4,6 +4,7 @@ public class PermissionNodes {
 
     public static final String COMMAND_LIST_OTHER   = "betterchunkloader.list.other";
     public static final String COMMAND_ADMIN        = "betterchunkloader.admin";
+    public static final String COMMAND_DEBUGGROUP   = "betterchunkloader.debuggroup";
     public static final String COMMAND_DELETE       = "betterchunkloader.delete";
     public static final String COMMAND_PURGE        = "betterchunkloader.purge";
     public static final String ADMIN_EDIT_ALL       = "betterchunkloader.edit";
