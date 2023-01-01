@@ -7,7 +7,7 @@ import br.com.finalcraft.betterchunkloader.datastore.BCLPlayerData;
 import br.com.finalcraft.betterchunkloader.datastore.DataStoreManager;
 import br.com.finalcraft.evernifecore.api.events.ECFullyLoggedInEvent;
 import br.com.finalcraft.evernifecore.listeners.base.ECListener;
-import br.com.finalcraft.evernifecore.scheduler.FCScheduller;
+import br.com.finalcraft.evernifecore.scheduler.FCScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,7 +23,7 @@ public class PlayerListener implements ECListener {
 
 		final Player player = event.getPlayer();
 
-		FCScheduller.scheduleAssyncInTicks(() -> {
+		FCScheduler.scheduleAssyncInTicks(() -> {
 			if (player.isOnline()){
 				RankLimiter rankLimiter = ChunksByRank.getPlayerLimit(player);
 
