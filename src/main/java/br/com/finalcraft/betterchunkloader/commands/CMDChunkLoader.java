@@ -139,7 +139,7 @@ public class CMDChunkLoader {
     @FCLocale(lang = LocaleType.PT_BR, text = "§2 ▶ §2ChunkLoaders em USO §e(Normal): §6%free_chunks%§7§l/§a%total_free_chunks%")
     public static LocaleMessage CHUNKS_IN_USE_ONLINE_ONLY;
 
-    @FCLocale(lang = LocaleType.EN_US, text = "§2 ▶ §2ChunkLoaders being used §b(Permanente): §6§6%free_chunks%§7§l/§a%total_premium_chunks%")
+    @FCLocale(lang = LocaleType.EN_US, text = "§2 ▶ §2ChunkLoaders being used §b(Always On): §6%premium_chunks%§7§l/§a%total_premium_chunks%")
     @FCLocale(lang = LocaleType.PT_BR, text = "§2 ▶ §2ChunkLoaders em USO §b(Permanente): §6%premium_chunks%§7§l/§a%total_premium_chunks%")
     public static LocaleMessage CHUNKS_IN_USE_ALWAYS_ON;
 
@@ -377,11 +377,11 @@ public class CMDChunkLoader {
     }
 
     @FinalCMD.SubCMD(
-            subcmd = {"removertudo"}
+            subcmd = {"removeall"}
     )
     public void removertudo(Player player, MultiArgumentos argumentos) {
         FCBukkitUtil.makeConsoleExecuteCommand("bcl delete " + player.getName());
-        player.sendMessage(ChatColor.GREEN + "Todos os seus chunkloaders foram removidos!");
+        player.sendMessage(ChatColor.GREEN + "All your chunkloaders have been removed!");
     }
 
     @FinalCMD.SubCMD(

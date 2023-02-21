@@ -16,7 +16,10 @@ OnlineOnlyBlockMaterial: IRON_BLOCK
 OnlineOnlyBlockMetadata: 0
 AlwaysOnBlockMaterial: DIAMOND_BLOCK
 AlwaysOnBlockMetadata: 0
-  
+
+# To toggle console debug output
+DebugOutput: true
+
 # Data Store to use, XML or MySQL, but extensions can add custom data stores
 DataStore: XML
 

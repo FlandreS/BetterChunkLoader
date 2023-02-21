@@ -56,6 +56,11 @@ public class CChunkLoader extends ChunkLoader implements InventoryHolder {
 	}
 
 	public boolean isExpired() {
+		if (BCLSettings.debugOutput) {
+			System.out.println("Current time: " + System.currentTimeMillis() + "- Last played: " + this.getOwnerLastPlayed() + "- Time since last played: " + System.currentTimeMillis() - this.getOwnerLastPlayed());
+			System.out.println("Max hours allowed offline: " + BCLSettings.maxHoursOffline + " In miliseconds: " + BCLSetting.maxHoursOffline*3600000L);
+			System.out.println("Did this chunkloader expire: " + System.currentTimeMillis() - this.getOwnerLastPlayed() > BCLSetting.maxHoursOffline*3600000L);
+		}
 		return System.currentTimeMillis() - this.getOwnerLastPlayed() > BCLSettings.maxHoursOffline*3600000L;
 	}
 

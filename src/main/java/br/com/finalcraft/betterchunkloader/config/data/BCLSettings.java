@@ -12,6 +12,8 @@ public class BCLSettings {
     public static int maxChunksAmountOnlineOnly;
     public static int onlineOnlyMeta;
     public static int alwaysOnMeta;
+	
+	public static boolean debugOutput;
 
     public static String dataStore;
     public static String mySqlUsername;
