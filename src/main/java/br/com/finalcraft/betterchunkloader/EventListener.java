@@ -159,7 +159,7 @@ public class EventListener implements ECListener {
 		List<CChunkLoader> clList = DataStoreManager.getDataStore().getChunkLoaders(event.getPlayer().getUniqueId());
 
 		for (CChunkLoader chunkLoader : clList) {
-			if (!chunkLoader.isAlwaysOn() && chunkLoader.blockCheck()) {
+			if (!chunkLoader.isAlwaysOn() && chunkLoader.blockCheck() || chunkLoader.isAlwaysOn() && chunkLoader.isExpired()) {
 				BCLForgeLib.instance().addChunkLoader(chunkLoader);
 			}
 		}
