@@ -12,6 +12,7 @@ public class BCLSettings {
     public static int maxChunksAmountOnlineOnly;
     public static int onlineOnlyMeta;
     public static int alwaysOnMeta;
+    public static int untilRebootMeta;
 
     public static boolean debugOutput;
 
@@ -23,12 +24,14 @@ public class BCLSettings {
 
     public static Material onlineOnlyMaterial;
     public static Material alwaysOnMaterial;
+    public static Material untilRebootMaterial;
 
     public static void initialize(){
         onlineOnlyMeta = ConfigManager.getMainConfig().getInt("OnlineOnlyBlockMetadata", 1);
         alwaysOnMeta = ConfigManager.getMainConfig().getInt("AlwaysOnBlockMetadata", 2);
+		untilRebootMeta = ConfigManager.getMainConfig().getInt("UntilRebootBlockMetadata", 3);
 
-        maxHoursOffline= ConfigManager.getMainConfig().getInt("MaxHoursOffline", 168);
+        maxHoursOffline= ConfigManager.getMainConfig().getInt("MaxHoursOffline", 24);
 
         defaultChunksAmountAlwaysOn= ConfigManager.getMainConfig().getInt("DefaultChunksAmount.AlwaysOn", 5);
         defaultChunksAmountOnlineOnly= ConfigManager.getMainConfig().getInt("DefaultChunksAmount.OnlineOnly", 50);
@@ -50,6 +53,14 @@ public class BCLSettings {
             BetterChunkLoader.instance().getLogger().warning("Invalid material: "+ms);
         }
         onlineOnlyMaterial = m;
+		
+	    ms = ConfigManager.getMainConfig().getString("AlwaysOnBlockMaterial", "GOLD_BLOCK");
+        m = Material.getMaterial(ms);
+        if (m == null) {
+            m = Material.GOLD_BLOCK;
+            BetterChunkLoader.instance().getLogger().warning("Invalid material: "+ms);
+        }
+        untilRebootMaterial = m;
 
         ms = ConfigManager.getMainConfig().getString("AlwaysOnBlockMaterial", "DIAMOND_BLOCK");
         m = Material.getMaterial(ms);
