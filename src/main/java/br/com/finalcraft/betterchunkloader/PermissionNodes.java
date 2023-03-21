@@ -12,6 +12,5 @@ public class PermissionNodes {
 
     public static final String CHUNK_ALWAYSON       = "betterchunkloader.alwayson";
     public static final String CHUNK_ONLINEONLY     = "betterchunkloader.onlineonly";
-    public static final String CHUNK_UNTILREBOOT    = "betterchunkloader.untilreboot";
 
 }

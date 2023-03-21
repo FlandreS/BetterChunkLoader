@@ -31,39 +31,36 @@ public class CChunkLoader extends ChunkLoader implements InventoryHolder {
 	private BlockLocation loc;
 	private Date creationDate;
 	private boolean isAlwaysOn;
-	private boolean isUntilReboot;
 	public boolean markDisabled = false;
 
 	private Map<UUID,BukkitTask> currentVisualizations = new HashMap<UUID,BukkitTask>();
 
 	public CChunkLoader() { }
 
-	public CChunkLoader(int chunkX, int chunkZ, String worldName, byte range, UUID owner, String name, BlockLocation loc, Date creationDate, boolean isAlwaysOn, boolean isUntilReboot) {
+	public CChunkLoader(int chunkX, int chunkZ, String worldName, byte range, UUID owner, String name, BlockLocation loc, Date creationDate, boolean isAlwaysOn) {
 		super(chunkX, chunkZ, worldName, range);
 		this.owner = owner;
 		this.name = name;
 		this.loc = loc;
 		this.creationDate = creationDate;
 		this.isAlwaysOn = isAlwaysOn;
-		this.isUntilReboot = isUntilReboot;
 	}
 
-	public CChunkLoader(String location, byte range, UUID owner, String name, Date creationDate, boolean isAlwaysOn, boolean isUntilReboot) {
+	public CChunkLoader(String location, byte range, UUID owner, String name, Date creationDate, boolean isAlwaysOn) {
 		super(0, 0, "", range);
 		this.setLocationString(location);
 		this.owner = owner;
 		this.name = name;
 		this.creationDate = creationDate;
 		this.isAlwaysOn = isAlwaysOn;
-		this.isUntilReboot = isUntilReboot;
 	}
 
 	public boolean isExpired() {
-	//	if (BCLSettings.debugOutput) {
-	//		System.out.println("Current time: " + System.currentTimeMillis() + "- Last played: " + this.getOwnerLastPlayed() + "- Time since last played: " + System.currentTimeMillis() - this.getOwnerLastPlayed());
-	//		System.out.println("Max hours allowed offline: " + BCLSettings.maxHoursOffline + " In miliseconds: " + BCLSettings.maxHoursOffline*3600000L);
-	//		System.out.println("Did this chunkloader expire: " + System.currentTimeMillis() - this.getOwnerLastPlayed() > BCLSettings.maxHoursOffline*3600000L);
-	//	}
+		if (BCLSettings.debugOutput) {
+			System.out.println("Current time: " + System.currentTimeMillis() + "- Last played: " + this.getOwnerLastPlayed() + "- Time since last played: " + System.currentTimeMillis() - this.getOwnerLastPlayed());
+			System.out.println("Max hours allowed offline: " + BCLSettings.maxHoursOffline + " In miliseconds: " + BCLSetting.maxHoursOffline*3600000L);
+			System.out.println("Did this chunkloader expire: " + System.currentTimeMillis() - this.getOwnerLastPlayed() > BCLSetting.maxHoursOffline*3600000L);
+		}
 		return System.currentTimeMillis() - this.getOwnerLastPlayed() > BCLSettings.maxHoursOffline*3600000L;
 	}
 
@@ -111,16 +108,14 @@ public class CChunkLoader extends ChunkLoader implements InventoryHolder {
 	}
 
 	public boolean blockCheck() {
-		if (this.loc.getBlock() == null) {
+		if (this.loc.getBlock()==null) {
 			return false;
 		}
 		if (isAlwaysOn) {
-			return this.loc.getBlock().getType() == BCLSettings.alwaysOnMaterial && this.loc.getBlock().getData() == BCLSettings.alwaysOnMeta;
-		} else if (isUntilReboot) {
-			return this.loc.getBlock().getType() == BCLSettings.untilRebootMaterial && this.loc.getBlock().getData() == BCLSettings.untilRebootMeta;
-		} else
-			return this.loc.getBlock().getType() == BCLSettings.onlineOnlyMaterial && this.loc.getBlock().getData() == BCLSettings.onlineOnlyMeta;
-
+			return this.loc.getBlock().getType()==BCLSettings.alwaysOnMaterial && this.loc.getBlock().getData() == BCLSettings.alwaysOnMeta;
+		} else {
+			return this.loc.getBlock().getType()==BCLSettings.onlineOnlyMaterial && this.loc.getBlock().getData() == BCLSettings.onlineOnlyMeta;
+		}
 	}
 
 	public boolean isOwnerOnline() {
@@ -223,11 +218,6 @@ public class CChunkLoader extends ChunkLoader implements InventoryHolder {
 	@XmlAttribute(name="aon")
 	void setAlwaysOn(boolean isAlwaysOn) {
 		this.isAlwaysOn = isAlwaysOn;
-	}
-
-	@XmlAttribute(name="ur")
-	void setUntilReboot(boolean isUntilReboot) {
-		this.isUntilReboot = isUntilReboot;
 	}
 
 	@Override

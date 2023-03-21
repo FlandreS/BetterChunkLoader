@@ -59,7 +59,7 @@ public class MySqlDataStore extends AHashMapDataStore {
 		try {
 			ResultSet rs = this.statement().executeQuery("SELECT * FROM bcl_chunkloaders");
 			while(rs.next()) {
-				CChunkLoader chunkLoader = new CChunkLoader(rs.getString(1), rs.getByte(2), toUUID(rs.getBytes(3)),rs.getString(4), new Date(rs.getLong(5)), rs.getBoolean(6),rs.getBoolean(7));
+				CChunkLoader chunkLoader = new CChunkLoader(rs.getString(1), rs.getByte(2), toUUID(rs.getBytes(3)),rs.getString(4), new Date(rs.getLong(5)), rs.getBoolean(6));
 				List<CChunkLoader> clList = this.chunkLoaders.get(chunkLoader.getWorldName());
 				if (clList==null) {
 					clList=new ArrayList<CChunkLoader>();

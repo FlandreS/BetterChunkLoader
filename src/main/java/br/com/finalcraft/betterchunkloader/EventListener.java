@@ -47,14 +47,14 @@ public class EventListener implements ECListener {
 
 	    Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
-
+		
 		if (clickedBlock == null || player == null) {
 			return;
 		}
 
 		Material blockType = clickedBlock.getType();
 
-		if (blockType != BCLSettings.alwaysOnMaterial  && blockType != BCLSettings.onlineOnlyMaterial && blockType != BCLSettings.untilRebootMaterial) {
+		if (blockType != BCLSettings.alwaysOnMaterial  && blockType != BCLSettings.onlineOnlyMaterial) {
 			return;
 		}
 
@@ -81,13 +81,7 @@ public class EventListener implements ECListener {
 			UUID uuid = player.getUniqueId();
 
 			TriState isAlwaysOn = blockType == BCLSettings.alwaysOnMaterial ? TriState.TRUE
-					: blockType == BCLSettings.untilRebootMaterial ? TriState.FALSE
 					: blockType == BCLSettings.onlineOnlyMaterial ? TriState.FALSE
-					: TriState.UNKNOWN;
-
-			TriState isUntilReboot = blockType == BCLSettings.untilRebootMaterial ? TriState.TRUE
-					: blockType == BCLSettings.onlineOnlyMaterial ? TriState.FALSE
-					: blockType == BCLSettings.alwaysOnMaterial ? TriState.FALSE
 					: TriState.UNKNOWN;
 
 			if (isAlwaysOn.isUnknown()){
@@ -103,12 +97,7 @@ public class EventListener implements ECListener {
 				if (player.isSneaking() && player.hasPermission(PermissionNodes.ADMIN_LOADER)) {
 					uuid = CChunkLoader.adminUUID;
 				}
-			}
-			else if (!player.hasPermission(PermissionNodes.CHUNK_UNTILREBOOT)) {
-				FCMessageUtil.needsThePermission(player, PermissionNodes.CHUNK_UNTILREBOOT);
-				return;
-			}
-			else {
+			} else {
 				if (!player.hasPermission(PermissionNodes.CHUNK_ONLINEONLY)) {
 					FCMessageUtil.needsThePermission(player, PermissionNodes.CHUNK_ONLINEONLY);
 					return;
@@ -117,7 +106,7 @@ public class EventListener implements ECListener {
 
 			ChunkPos chunkPos = BlockPos.from(clickedBlock.getLocation()).getChunkPos();
 
-			chunkLoader = new CChunkLoader(chunkPos.getX(), chunkPos.getZ(), clickedBlock.getWorld().getName(), (byte) -1, uuid,player.getName(), new BlockLocation(clickedBlock), null, (clickedBlock.getType() == BCLSettings.alwaysOnMaterial), (clickedBlock.getType() == BCLSettings.untilRebootMaterial));
+			chunkLoader = new CChunkLoader(chunkPos.getX(), chunkPos.getZ(), clickedBlock.getWorld().getName(), (byte) -1, uuid,player.getName(), new BlockLocation(clickedBlock), null, (clickedBlock.getType() == BCLSettings.alwaysOnMaterial));
 			chunkLoader.showUI(player);
 
 		} else {
@@ -127,8 +116,8 @@ public class EventListener implements ECListener {
 					chunkLoader.showCorners(player);
 				}
 			} else {
-				if (player.getItemInHand().getType()!=BCLSettings.alwaysOnMaterial && player.getItemInHand().getType()!=BCLSettings.onlineOnlyMaterial && player.getItemInHand().getType()!=BCLSettings.untilRebootMaterial) {
-					player.sendMessage(Messages.get("Can Create Chunk Loaders"));
+				if (player.getItemInHand().getType()!=BCLSettings.alwaysOnMaterial && player.getItemInHand().getType()!=BCLSettings.onlineOnlyMaterial) {
+					player.sendMessage(Messages.get("CanCreateChunkLoaders"));
 				}
 			}
 		}
